@@ -1,4 +1,6 @@
 
+#include "environment.h"
+
 /**
   \file   environment.cpp
   \brief  All functions for the environment classes
@@ -12,21 +14,34 @@
 Cell::Cell(){
   dirty = false;
   age   = 0;
-  up    = NULL;
-  down  = NULL;
-  left  = NULL;
-  right = NULL;
+  /*
+  up    = null;
+  down  = null;
+  left  = null;
+  right = null;
+  */
+}
+
+/**
+  \brief  Constructor with set state for dirty
+  \date   20140120 - Magnus Øverbø
+**/
+Cell::Cell( bool dirty ){
+  dirty = dirty;
+  age   = 0;
+  /*
+  up    = null;
+  down  = null;
+  left  = null;
+  right = null;
+  */
 }
 
 /**
   \brief Deconstructor
   \date   20140120 - Magnus Øverbø
 **/
-Cell::~cell(){
-  delete left;
-  delete right;
-  delete up;
-  delete down;
+Cell::~Cell(){
 }
 
 /**
@@ -37,7 +52,7 @@ Cell::~cell(){
   \retval true    Returns true if nothing failed
   \retval false   Returns false if something failed
 **/
-bool  Cell::setNeighbor (int id, Cell *pointer){
+bool  Cell::setNeighbor(int id, Cell *pointer){
   bool ret = false;
   if(pointer != NULL && id >= 1 && id <= 4){
     switch( id ){
@@ -62,9 +77,9 @@ Cell* Cell::getNeighbor( int id ){
   if( id >= 1 && id <= 4 ){
     switch( id ){
       case 1: ret = down;   break;
-      case 1: ret = up;     break;
-      case 1: ret = left;   break;
-      case 1: ret = right;  break;
+      case 2: ret = up;     break;
+      case 3: ret = left;   break;
+      case 4: ret = right;  break;
     }
   }
   return ret;
@@ -112,7 +127,7 @@ int   Cell::getAge(){
   \retval false Is returned if the dirty state was not updated
 **/
 bool  Cell::updateDirty(){
-  if( rand()%10 == 0 && dirty == false ){
+  if( rand()%600 == 0 && dirty == false ){
     dirty = true;
     return true;
   }
@@ -124,7 +139,7 @@ bool  Cell::updateDirty(){
   \date   20140120 - Magnus Øverbø
   \param  value Bool value to set the dirty state
 **/
-void  Cell::setDust( bool value){
+void  Cell::setDirty( bool value){
   if( value == true || value == false )
     dirty = value;
 }
@@ -139,4 +154,18 @@ bool  Cell::getDirty(){
   return dirty;
 }
 
+
+/**
+  \brief  Returns the dirty state of the cell
+  \date   20140120 - Magnus Øverbø
+**/
+void Cell::display(){
+  cout << "\nDirty:\t" << (( dirty ) ? "true" : "false" );
+  cout << "\t\tAge:\t"   << age << " since cleaned";
+  //cout << "\nAbove:\t" << (( up    == NULL ) ? "Void" : "Cell" );
+  //cout << "\nBelow:\t" << (( down  == NULL ) ? "Void" : "Cell" );
+  //cout << "\nLeft:\t"  << (( left  == NULL ) ? "Void" : "Cell" );
+  //cout << "\nRight:\t" << (( right == NULL ) ? "Void" : "Cell" );
+	//cout << "\n\n";
+}
 

@@ -1,4 +1,9 @@
 
+#ifndef __ENVIRONMENT_H_INCLUDED__
+#define __ENVIRONMENT_H_INCLUDED__
+
+#include "stdhd.h"
+
 /**
   \file   environment.h
   \brief  Header file for the environment
@@ -21,15 +26,18 @@ class Cell{
 
   public:
     Cell();
+    Cell( bool dirty );
     ~Cell();
-    bool  setNeighbor( int id, Cell *pointer );
-    Cell* getNeighbor( int id );
+    bool  setNeighbor( int , Cell* );
+    Cell* getNeighbor( int );
     bool  updateAge();
-    bool  resetAge(int)
+    bool  resetAge();
     int   getAge();
     bool  updateDirty();
-    void  setDirty();
+    void  setDirty( bool );
     bool  getDirty();
-}
+    void  display();
+};
 
+#endif  // __ENVIRONMENT_H_INCLUDED__ 
 

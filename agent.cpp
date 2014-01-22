@@ -76,28 +76,28 @@ bool Agent::move(){
 		cout << "\nAction:\t\tCleaned cell";
 	}
 		//	Try going right
-	else if( current->getNeighbor(4)->isSpace() ){
+	else if( current->getNeighbor(RIGHT)->isSpace() ){
 		current = current->getNeightbor(4);
 		ret = true;
 		performance--;
 		cout << "\nAction:\t\tMoved right";
 	}
 		//	Try going down
-	else if( current->getNeighbor(1)->isSpace() ){
+	else if( current->getNeighbor(DOWN)->isSpace() ){
 		current = current->getNeightbor(1);
 		ret = true;
 		performance--;
 		cout << "\nAction:\t\tMoved down";
 	}
 		//	Try going left
-	else if( current->getNeighbor(3)->isSpace() ){
+	else if( current->getNeighbor(LEFT)->isSpace() ){
 		current = current->getNeightbor(3);
 		ret = true;
 		performance--;
 		cout << "\nAction:\t\tMoved left";
 	}
 		//	Try Going up
-	else if( current->getNeighbor(2)->isSpace() ){
+	else if( current->getNeighbor(UP)->isSpace() ){
 		current = current->getNeightbor(2);
 		ret = true;
 		performance--;

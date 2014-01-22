@@ -7,6 +7,7 @@
 //  Include files
 #include "stdhd.h"
 #include "environment.h"
+#include "agent.h"
 
 //  Global variables
 int	 STEPS = 1000;

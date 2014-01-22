@@ -56,10 +56,10 @@ bool  Cell::setNeighbor(int id, Cell *pointer){
   bool ret = false;
   if(pointer != NULL && id >= 1 && id <= 4){
     switch( id ){
-      case 1: down  = pointer; ret = true; break;
-      case 2: up    = pointer; ret = true; break;
-      case 3: left  = pointer; ret = true; break;
-      case 4: right = pointer; ret = true; break;
+      case DOWN: down  = pointer; ret = true; break;
+      case UP: up    = pointer; ret = true; break;
+      case LEFT: left  = pointer; ret = true; break;
+      case RIGHT: right = pointer; ret = true; break;
     }
   }
   return ret;
@@ -76,10 +76,10 @@ Cell* Cell::getNeighbor( int id ){
   Cell* ret = NULL;
   if( id >= 1 && id <= 4 ){
     switch( id ){
-      case 1: ret = down;   break;
-      case 2: ret = up;     break;
-      case 3: ret = left;   break;
-      case 4: ret = right;  break;
+      case DOWN1: ret = down;   break;
+      case UP: ret = up;     break;
+      case LEFT: ret = left;   break;
+      case RIGHT: ret = right;  break;
     }
   }
   return ret;

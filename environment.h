@@ -11,6 +11,14 @@
 **/
 
 /**
+ \Global Variables
+/**
+
+int RIGHT=4;
+int DOWN=1;
+int LEFT=3;
+int UP=2;
+/**
   \class  Cell
   \brief  The class for the cells that makes up the environment
   \date   20140120 - Magnus Øverbø

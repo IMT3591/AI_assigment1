@@ -23,7 +23,8 @@ enum TYPE{ OPEN, WALL, OBSTACLE };
 **/
 class Cell{
   private:
-    bool  dirty;    /*< Boolean value to indicate if the cell is dirty */
+    int		key;			/*< Integer indicating the ID of the cell */
+		bool  dirty;    /*< Boolean value to indicate if the cell is dirty */
     int   age;      /*< Integer indicating time it's was last cleaning */
 		int		type;			/*< Integer indicatiing the type of cell(Wall, object or
 											open */
@@ -34,8 +35,8 @@ class Cell{
 
   public:
     Cell();
-    Cell( bool, int );
-    Cell( bool, int, Cell*, Cell*, Cell*, Cell* );
+    Cell( int, bool, int );
+    Cell( int, bool, int, Cell*, Cell*, Cell*, Cell* );
     ~Cell();
     
 		Cell* getNeighbor( int );
@@ -53,6 +54,8 @@ class Cell{
     
 		void  display();
 		bool	isSpace();
+		void	getType();
+		void	getID();
 };
 
 #endif  // __ENVIRONMENT_H_INCLUDED__ 

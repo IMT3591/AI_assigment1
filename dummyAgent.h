@@ -1,6 +1,6 @@
 
-#ifndef __AGENT_H_INCLUDED__
-#define __AGENT_H_INCLUDED__
+#ifndef __DUMMYAGENT_H_INCLUDED__
+#define __DUMMYAGENT_H_INCLUDED__
 
 #include "stdhd.h"
 #include "environment.h"

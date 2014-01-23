@@ -1,14 +1,13 @@
-
-#ifndef __AGENT_H_INCLUDED__
-#define __AGENT_H_INCLUDED__
-
-#include "stdhd.h"
-
 /**
   \file   agent.h
   \brief  Header file for the agent
   \date   20140122 - Magnus Øverbø
 **/
+
+#ifndef __AGENT_H_INCLUDED__
+#define __AGENT_H_INCLUDED__
+
+#include "stdhd.h"
 
 /** Global variables used in the Agent **/
 int MAX_BAT = 1000; /*< Number of steps the battery can make */

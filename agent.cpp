@@ -1,20 +1,10 @@
-
-#include "agent.h";
-
 /**
 	\file		agent.cpp
 	\date		20140122 - Magnus Øverbø
 	\brief 	Functions for the agent class
 **/
 
-/**
-Cell* current;			/*< Pointer to the cell the agent located at *
-Cell*	charger;			/*< Pointer to the cell where the charger is located*
-int		performance;	/*< Performance counter for the agent *
-int		battery;			/*< Battery info, for each action the battery is
-													depleted by 1 *
-
-**/
+#include "agent.h";
 
 /**
 	\brief 	Functions for the agent class
@@ -23,6 +13,13 @@ int		battery;			/*< Battery info, for each action the battery is
 	\retval	
 **/
 Agent::Agent(){}
+/**
+	\brief 	
+	\date		20140122 - Magnus Øverbø
+	\param	
+	\retval	
+**/
+Agent::~Agent(){}
 /**
 	\brief 	
 	\date		20140122 - Magnus Øverbø
@@ -47,13 +44,6 @@ Agent::Agent(Cell* tLocation, Cell* tCharger){
 	performance = INIT_PERFORMANCE;
 	battery	= MAX_BAT;
 }
-/**
-	\brief 	
-	\date		20140122 - Magnus Øverbø
-	\param	
-	\retval	
-**/
-Agent::~Agent(){}
 
 
 /**

@@ -1,5 +1,6 @@
 CC		= g++
-IN		= environment.cpp main.cpp
+#IN		= main.cpp
+IN		= environment.cpp dummyAgent.cpp main.cpp
 OUT		= main.exe
 
 build:

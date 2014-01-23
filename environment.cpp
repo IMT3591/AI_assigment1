@@ -57,8 +57,24 @@ Cell::Cell( int tKey, bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d)
 Cell::~Cell(){}
 
 /**
-  \brief  Sets the the objects link to the neighbor
-  \date   20140120 - Magnus Øverbø
+  \brief  Sets pointer of the adjacent cells if its not NULL
+  \date   20140123 - Magnus Øverbø
+	\param	Cell*	Left link
+	\param	Cell*	Right link
+	\param	Cell*	Up link
+	\param	Cell*	Down link
+**/
+void Cell::setNeighbors(Cell* l, Cell* r, Cell* u, Cell* d){
+	if( l != NULL )		setNeighbor(LEFT, 	l, this);
+	if( r != NULL )		setNeighbor(RIGHT, 	r, this);
+	if( u != NULL )		setNeighbor(UP, 		u, this);
+	if( d != NULL )		setNeighbor(DOWN, 	d, this);
+}
+
+/**
+  \brief  Sets pointer of the adjacent cell if its not NULL and calls the
+	linkback function
+  \date   20140123 - Magnus Øverbø
 **/
 void  Cell::setNeighbor(int id, Cell *pointer, Cell* cur){
 	if( pointer != NULL && id >= LEFT && id <= DOWN){
@@ -80,30 +96,21 @@ void  Cell::setNeighbor(int id, Cell *pointer, Cell* cur){
 		}
   }
 }
-void Cell::setNeighbors(Cell* l, Cell* r, Cell* u, Cell* d){
-	if( l != NULL )		setNeighbor(LEFT, 	l, this);
-	if( r != NULL )		setNeighbor(RIGHT, 	r, this);
-	if( u != NULL )		setNeighbor(UP, 		u, this);
-	if( d != NULL )		setNeighbor(DOWN, 	d, this);
-}
+
+/**
+  \brief  Sets the pointer of the adjacent cell 
+  \date   20140123 - Magnus Øverbø
+	\param	Cell* Pointer to the adjacent cell
+	\param	int		Integer to state which link to set
+**/
 void  Cell::setNeighbor(int id, Cell *pointer){
 	if( pointer != NULL && id >= LEFT && id <= DOWN){
-		if( id == LEFT){
-			left = pointer;
-		}
-		else if( id == RIGHT){
-			right = pointer;
-		}
-		else if( id == UP){
-			up=pointer;
-		}
-		else if( id == DOWN){
-			down = pointer;	
-		}
+		if( 		 id == LEFT){		left 	= pointer;		}
+		else if( id == RIGHT){	right = pointer;		}
+		else if( id == UP){			up		= pointer;		}
+		else if( id == DOWN){		down	= pointer;		}
   }
-	else cout << "pointer is null";
 }
-
 
 /**
   \brief  Returns the neighbor as indicated by the parameter
@@ -192,9 +199,8 @@ bool  Cell::getDirty(){
   return dirty;
 }
 
-
 /**
-  \brief  Returns the dirty state of the cell
+  \brief  Displays the information about the current and adjacent cells
   \date   20140120 - Magnus Øverbø
 **/
 void Cell::display(){
@@ -233,6 +239,7 @@ void Cell::display(){
 	cout << "\n\n";
 }
 
+// Prints the type of cell
 void Cell::getType(){
 	if( type == OPEN )
 		cout << "OPEN";
@@ -242,12 +249,17 @@ void Cell::getType(){
 		cout << "Wall";
 }
 
+/**
+	\brief	Returns true of the cell is an open space
+	\date		20140123 - Magnus Øverbø
+**/
 bool Cell::isSpace(){
 	if( type == OPEN )
 		return true;
 	return false;
 }
 
+// Prints the ID of the cell
 void Cell::getID(){
 	cout << key;
 }

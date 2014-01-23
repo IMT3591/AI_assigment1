@@ -1,11 +1,10 @@
-
-#include "environment.h"
-
 /**
   \file   environment.cpp
   \brief  All functions for the environment classes
   \date   20140120 - Magnus Øverbø
 **/
+
+#include "environment.h"
 
 /**
   \brief  Constructor
@@ -14,27 +13,38 @@
 Cell::Cell(){
   dirty = false;
   age   = 0;
-  /*
-  up    = null;
-  down  = null;
-  left  = null;
-  right = null;
-  */
+  left  = NULL;
+  right = NULL;
+  up    = NULL;
+  down  = NULL;
 }
 
 /**
   \brief  Constructor with set state for dirty
   \date   20140120 - Magnus Øverbø
 **/
-Cell::Cell( bool dirty ){
-  dirty = dirty;
+Cell::Cell( bool tDirt, int tType){
+  dirty = tDirt;
+	type	= tType;
   age   = 0;
-  /*
-  up    = null;
-  down  = null;
-  left  = null;
-  right = null;
-  */
+  left  = NULL;
+  right = NULL;
+  up    = NULL;
+  down  = NULL;
+}
+
+/**
+  \brief  Constructor with set state for dirty
+  \date   20140120 - Magnus Øverbø
+**/
+Cell::Cell( bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d){
+  dirty = tDirt;
+	type	= tType;
+  age   = 0;
+  left  = l;
+  right = r;
+  up    = u;
+  down  = d;
 }
 
 /**
@@ -52,18 +62,52 @@ Cell::~Cell(){
   \retval true    Returns true if nothing failed
   \retval false   Returns false if something failed
 **/
-bool  Cell::setNeighbor(int id, Cell *pointer){
-  bool ret = false;
+void  Cell::setNeighbor(int id, Cell *pointer, Cell* cur){
   if(pointer != NULL && id >= 1 && id <= 4){
-    switch( id ){
-      case DOWN: down  = pointer; ret = true; break;
-      case UP: up    = pointer; ret = true; break;
-      case LEFT: left  = pointer; ret = true; break;
-      case RIGHT: right = pointer; ret = true; break;
-    }
+		if( id == LEFT){
+			left = pointer;
+			left->setNeighbor(LEFT, cur);
+		}
+		else if( id == RIGHT){
+			right = pointer;
+			right->setNeighbor(RIGHT, cur);
+		}
+		else if( id == UP){
+			up=pointer;
+			up->setNeighbor(UP, cur);
+		}
+		else if( id == DOWN){
+			down = pointer;	
+			down->setNeighbor(DOWN, cur);
+		}
   }
-  return ret;
 }
+
+// Sets the backtrack for the neighboring cell
+void  Cell::setNeighbor(int id, Cell *pointer){
+  if(pointer != NULL && id >= 1 && id <= 4){
+		if( id == LEFT){
+			left = pointer;
+		}
+		else if( id == RIGHT){
+			right = pointer;
+		}
+		else if( id == UP){
+			up=pointer;
+		}
+		else if( id == DOWN){
+			down = pointer;	
+		}
+  }
+}
+
+void Cell::setNeighbors(Cell* l, Cell* r, Cell* u, Cell* d){
+	setNeighbor(LEFT, 	l, this);
+	setNeighbor(RIGHT, 	r, this);
+	setNeighbor(UP, 		u, this);
+	setNeighbor(DOWN, 	d, this);
+}
+
 
 /**
   \brief  Returns the neighbor as indicated by the parameter
@@ -75,12 +119,10 @@ bool  Cell::setNeighbor(int id, Cell *pointer){
 Cell* Cell::getNeighbor( int id ){
   Cell* ret = NULL;
   if( id >= 1 && id <= 4 ){
-    switch( id ){
-      case DOWN1: ret = down;   break;
-      case UP: ret = up;     break;
-      case LEFT: ret = left;   break;
-      case RIGHT: ret = right;  break;
-    }
+		if( id == LEFT)				ret = left;
+		else if( id == RIGHT)	ret = right;
+		else if( id == UP)		ret = up;
+		else if( id == DOWN)	ret = down;	
   }
   return ret;
 }
@@ -167,5 +209,11 @@ void Cell::display(){
   //cout << "\nLeft:\t"  << (( left  == NULL ) ? "Void" : "Cell" );
   //cout << "\nRight:\t" << (( right == NULL ) ? "Void" : "Cell" );
 	//cout << "\n\n";
+}
+
+bool Cell::isSpace(){
+	if(current->type() == SPACE)
+		return true;
+	return false;
 }
 

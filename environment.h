@@ -12,12 +12,10 @@
 
 /**
  \Global Variables
-/**
+**/
+const enum DIRECTION{ LEFT, RIGHT, UP, DOWN };
+const enum TYPE{ OPEN, WALL, OBSTACLE };
 
-int RIGHT=4;
-int DOWN=1;
-int LEFT=3;
-int UP=2;
 /**
   \class  Cell
   \brief  The class for the cells that makes up the environment
@@ -34,17 +32,25 @@ class Cell{
 
   public:
     Cell();
-    Cell( bool dirty );
+    Cell( bool, int );
+    Cell( bool, int, Cell*, Cell*, Cell*, Cell* );
     ~Cell();
-    bool  setNeighbor( int , Cell* );
-    Cell* getNeighbor( int );
-    bool  updateAge();
-    bool  resetAge();
+    
+		Cell* getNeighbor( int );
+    void  setNeighbors( Cell*, Cell*, Cell*, Cell* );
+    void  setNeighbor( int, Cell* );
+    void  setNeighbor( int, Cell*,  Cell* );
+    
     int   getAge();
-    bool  updateDirty();
-    void  setDirty( bool );
+		bool  updateAge();
+    bool  resetAge();
+    
     bool  getDirty();
-    void  display();
+		bool  updateDirty();
+    void  setDirty( bool );
+    
+		void  display();
+		bool	isSpace();
 };
 
 #endif  // __ENVIRONMENT_H_INCLUDED__ 

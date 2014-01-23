@@ -13,8 +13,8 @@
 /**
  \Global Variables
 **/
-const enum DIRECTION{ LEFT, RIGHT, UP, DOWN };
-const enum TYPE{ OPEN, WALL, OBSTACLE };
+enum DIRECTION{ LEFT, RIGHT, UP, DOWN };
+enum TYPE{ OPEN, WALL, OBSTACLE };
 
 /**
   \class  Cell
@@ -25,6 +25,8 @@ class Cell{
   private:
     bool  dirty;    /*< Boolean value to indicate if the cell is dirty */
     int   age;      /*< Integer indicating time it's was last cleaning */
+		int		type;			/*< Integer indicatiing the type of cell(Wall, object or
+											open */
     Cell  *left,    /*< Pointer to the left neighbor cell */
           *right,   /*< Pointer to the right neighbor cell */ 
           *up,      /*< Pointer to the above neighbor cell */

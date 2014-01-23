@@ -41,26 +41,21 @@ Cell::Cell( bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d){
   dirty = tDirt;
 	type	= tType;
   age   = 0;
-  left  = l;
-  right = r;
-  up    = u;
-  down  = d;
+  left  = NULL;
+  right = NULL;
+  up    = NULL;
+  down  = NULL;
+	setNeighbors( l, r, u, d );
 }
 
 /**
   \brief Deconstructor
-  \date   20140120 - Magnus Øverbø
 **/
-Cell::~Cell(){
-}
+Cell::~Cell(){}
 
 /**
-  \brief  Sets the neighbor as indicated by the parameter
+  \brief  Sets the neighbor and the backlink
   \date   20140120 - Magnus Øverbø
-  \param  id      Integer that indicates which cell pointer to set
-  \param  pointer Pointer to the Cell object to place
-  \retval true    Returns true if nothing failed
-  \retval false   Returns false if something failed
 **/
 void  Cell::setNeighbor(int id, Cell *pointer, Cell* cur){
   if(pointer != NULL && id >= 1 && id <= 4){
@@ -83,7 +78,7 @@ void  Cell::setNeighbor(int id, Cell *pointer, Cell* cur){
   }
 }
 
-// Sets the backtrack for the neighboring cell
+// Sets the pointer for the neighboring cell
 void  Cell::setNeighbor(int id, Cell *pointer){
   if(pointer != NULL && id >= 1 && id <= 4){
 		if( id == LEFT){
@@ -102,10 +97,10 @@ void  Cell::setNeighbor(int id, Cell *pointer){
 }
 
 void Cell::setNeighbors(Cell* l, Cell* r, Cell* u, Cell* d){
-	setNeighbor(LEFT, 	l, this);
-	setNeighbor(RIGHT, 	r, this);
-	setNeighbor(UP, 		u, this);
-	setNeighbor(DOWN, 	d, this);
+	if( l != NULL )		setNeighbor(LEFT, 	l, this);
+	if( r != NULL )		setNeighbor(RIGHT, 	r, this);
+	if( u != NULL )		setNeighbor(UP, 	u, this);
+	if( d != NULL )		setNeighbor(DOWN, 	d, this);
 }
 
 
@@ -212,7 +207,7 @@ void Cell::display(){
 }
 
 bool Cell::isSpace(){
-	if(current->type() == SPACE)
+	if( type == OPEN )
 		return true;
 	return false;
 }

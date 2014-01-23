@@ -10,9 +10,11 @@
 #include "agent.h"
 
 //  Global variables
-int	 STEPS = 1000;
-Cell *A = new Cell(false);
-Cell *B = new Cell(false);
+int	 STEPS = 3;
+Cell *X = new Cell(false, WALL);
+Cell *Y = new Cell(false, WALL);
+Cell *A = new Cell(false, OPEN, X, NULL, NULL, NULL);
+Cell *B = new Cell(false, OPEN, A, Y, NULL, NULL);
 
 //  Function declarations
 void update();
@@ -22,7 +24,6 @@ int main( ){
 	for( int i=0; i<STEPS; i++){	
 		A->updateAge();
 		B->updateAge();
-
 		A->display();
 		B->display();
 	}

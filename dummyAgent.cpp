@@ -60,51 +60,51 @@ bool Agent::move(){
 		ret = true;
 		performance++;
 		cout << "\nAction:\t\tCleaned cell";
-	}else if( current->isSpace() ){
-		if( lastMove == UP ){
-			ret=true;
-			performance--;
-			swipeNumber++;
-			if( swipeNumber%2 == 1){
-				current=current->getNeighbour(LEFT);
-				// Memorymap
-				lastMove=LEFT;
-				cout << "\nAction:\t\tMoved to the cell on the left";
-			}else{
-				current=current->getNeighbour(RIGHT);
+
+		//When it's not in the wall
+	}else{
+		 if( current->isSpace() ){
+			//after going up
+			if( lastMove == UP ){
+				ret=true;
+				performance--;
+				swipeNumber++;
+				if( swipeNumber%2 == 1){
+					current=current->getNeighbor(LEFT);
+					// Memorymap
+					lastMove=LEFT;
+					cout << "\nAction:\t\tMoved to the cell on the left";
+				}else{
+					current=current->getNeighbor(RIGHT);
+					//Memorymap
+					lastMove=RIGHT;
+					cout << "\nAction:\t\tMoved to the cell on the right";
+				}
+			//other case
+			}else if( lastMove == DOWN || lastMove == LEFT || lastMove == RIGHT){
+				current=current->getNeighbor(lastMove);
 				//Memorymap
-				lastMove=RIGHT;
-				cout << "\nAction:\t\tMoved to the cell on the right";
+				ret=true;
+				performance--;
+				switch(lastMove){
+					case DOWN: cout << "\nAction:\t\tMoved to the cell bellow"; break;
+					case LEFT: cout << "\nAction:\t\tMoved to the cell on the left";break;
+					case RIGHT: cout << "\nAction:\t\tMoved to the cell on the right";break;
+				};
 			}
-		}else if( lastMove == DOWN || lastMove == LEFT || lastMove == RIGHT){
-			current=current->getNeighbour(lastMove);
-			//Memorymap
-			ret=true;
-			performance--;
-			switch(lastMove){
-				case DOWN: cout << "\nAction:\t\tMoved to the cell bellow"; break;
-				case LEFT: cout << "\nAction:\t\tMoved to the cell on the left";break;
-				case RIGHT: cout << "\nAction:\t\tMoved to the cell on the right";break;
-			};
-		}else {
-			current=current->getNeighbour(LEFT);
-			//Memorymap
-			ret=true;
-			performance--;
-			lastMove=LEFT;
-			cout << "\nAction:\t\tMoved to the cell on the left";
+			//Wall case
 		}else if( lastMove==UP ){
-			current=current->getNeighbour(DOWN);
+			current=current->getNeighbor(DOWN);
 			ret=true;
 			performance--;
 			lastMove=DOWN;
 			cout << "\nAction:\t\tHitted the wall above";
 		}else if( lastMove==RIGHT ){
 			if(swipeNumber%2==0){
-				current=current->getNeighbour(LEFT)->getNeighbour(UP);
+				current=current->getNeighbor(LEFT)->getNeighbor(UP);
 				lastMove=UP;
 			}else{
-				current=*current->getNeighbour(LEFT);
+				current=current->getNeighbor(LEFT);
 				lastMove=LEFT;
 			}
 			ret=true;
@@ -112,17 +112,17 @@ bool Agent::move(){
 			cout << "\nAction:\t\tHitted the right wall, running away";
 		}else if( lastMove==LEFT ){
 			if( swipeNumber%2==1){
-				current=*current->getNeighbour(RIGHT)->getNeighbour(UP);
+				current=current->getNeighbor(RIGHT)->getNeighbor(UP);
 				lastMove=UP;
 			}else{
-				current=*current->getNeighbour(RIGHT);
-				lastMove=RIGHT;
+				current=current->getNeighbor(RIGHT);
+			lastMove=RIGHT;
 			}
 			ret=true;
 			performance--;
 			cout << "\nAction:\t\tHitted the left wall, running away";
 		}else if( lastMove==DOWN ){
-			current=*current->getNeighbour(UP);
+			current=current->getNeighbor(UP);
 			lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
 			ret=true;
 			performance--;
@@ -145,5 +145,4 @@ bool Agent::clean(){
 		return true;
 	return false;
 }
-
-#endif  // __AGENT_H_INCLUDED__ 
+ 

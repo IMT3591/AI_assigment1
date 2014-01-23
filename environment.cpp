@@ -264,3 +264,13 @@ void Cell::getID(){
 	cout << key;
 }
 
+/**
+	\brief	Returns true of the id is an match
+	\date		20140123 - Magnus Øverbø
+**/
+bool Cell::checkID( int id){
+	if( key == id )	return true;
+	return false;
+}
+
+

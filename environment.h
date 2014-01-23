@@ -1,20 +1,17 @@
-
-#ifndef __ENVIRONMENT_H_INCLUDED__
-#define __ENVIRONMENT_H_INCLUDED__
-
-#include "stdhd.h"
-
 /**
   \file   environment.h
   \brief  Header file for the environment
   \date   20140120 - Magnus Øverbø
 **/
 
-/**
- \Global Variables
-**/
-enum DIRECTION{ LEFT, RIGHT, UP, DOWN };
-enum TYPE{ OPEN, WALL, OBSTACLE };
+#ifndef __ENVIRONMENT_H_INCLUDED__
+#define __ENVIRONMENT_H_INCLUDED__
+
+#include "stdhd.h"
+
+/**	Global Variables	**/
+enum DIRECTION{ LEFT, RIGHT, UP, DOWN };	/*< Enum giving the directions */
+enum TYPE{ OPEN, WALL, OBSTACLE };				/*< Enum giving the type of cell */
 
 /**
   \class  Cell
@@ -56,6 +53,7 @@ class Cell{
 		bool	isSpace();
 		void	getType();
 		void	getID();
+		bool	checkID( int );
 };
 
 #endif  // __ENVIRONMENT_H_INCLUDED__ 

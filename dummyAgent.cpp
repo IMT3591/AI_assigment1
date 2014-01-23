@@ -1,33 +1,35 @@
-
-#include "dummyAgent.h"
-
 /**
 	\file		agent.cpp
 	\date		20140122 - Magnus Øverbø
 	\brief 	Functions for the agent class
 **/
 
-/**
-	\brief 	Functions for the agent class
-	\date		20140122 - Magnus Øverbø
-	\param	
-	\retval	
-**/
+#include "dummyAgent.h"
 
-Agent::Agent(){}
+int INIT_PERFORMANCE = 0;
+
+/**
+	\brief 	Constructor
+	\date		20140122 - Magnus Øverbø
+**/
+Agent::Agent(){
+	current 		= NULL;
+	memoryMap 	= NULL;
+	lastMove 		= -1;
+	run 				= true;
+	performance = INIT_PERFORMANCE;
+	swipeNumber = 1;
+}
 
 /**
 	\brief 	
 	\date		20140122 - Magnus Øverbø
-	\param	
-	\retval	
 **/
-
 Agent::Agent(Cell* tLocation){
-	current = tLocation;
-	memoryMap = tLocation;
-	lastMove = 0;
-	run = true;
+	current 		= tLocation;
+	memoryMap 	= tLocation;
+	lastMove 		= 0;
+	run 				= true;
 	performance = INIT_PERFORMANCE;
 	swipeNumber = 1;
 }
@@ -38,7 +40,6 @@ Agent::Agent(Cell* tLocation){
 	\param	
 	\retval	
 **/
-
 Agent::~Agent(){}
 
 /**
@@ -51,7 +52,6 @@ Agent::~Agent(){}
 	\param
 	\retval
 **/
-
 bool Agent::move(){
 	bool ret = false;
 		//	Check if location is dirty and clean it
@@ -87,9 +87,12 @@ bool Agent::move(){
 				ret=true;
 				performance--;
 				switch(lastMove){
-					case DOWN: cout << "\nAction:\t\tMoved to the cell bellow"; break;
-					case LEFT: cout << "\nAction:\t\tMoved to the cell on the left";break;
-					case RIGHT: cout << "\nAction:\t\tMoved to the cell on the right";break;
+					case DOWN: 	cout << "\nAction:\t\tMoved to the cell bellow"; 
+											break;
+					case LEFT:	cout << "\nAction:\t\tMoved to the cell on the left";
+											break;
+					case RIGHT: cout << "\nAction:\t\tMoved to the cell on the right";
+											break;
 				};
 			}
 			//Wall case
@@ -98,7 +101,7 @@ bool Agent::move(){
 			ret=true;
 			performance--;
 			lastMove=DOWN;
-			cout << "\nAction:\t\tHitted the wall above";
+			cout << "\nAction:\t\tHit the wall above, running away";
 		}else if( lastMove==RIGHT ){
 			if(swipeNumber%2==0){
 				current=current->getNeighbor(LEFT)->getNeighbor(UP);
@@ -109,24 +112,24 @@ bool Agent::move(){
 			}
 			ret=true;
 			performance--;
-			cout << "\nAction:\t\tHitted the right wall, running away";
+			cout << "\nAction:\t\tHit the right wall, running away";
 		}else if( lastMove==LEFT ){
 			if( swipeNumber%2==1){
 				current=current->getNeighbor(RIGHT)->getNeighbor(UP);
 				lastMove=UP;
 			}else{
 				current=current->getNeighbor(RIGHT);
-			lastMove=RIGHT;
+				lastMove=RIGHT;
 			}
 			ret=true;
 			performance--;
-			cout << "\nAction:\t\tHitted the left wall, running away";
+			cout << "\nAction:\t\tHit the left wall, running away";
 		}else if( lastMove==DOWN ){
 			current=current->getNeighbor(UP);
 			lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
 			ret=true;
 			performance--;
-			cout << "\nAction:\t\tHitted the bottom wall, running away";
+			cout << "\nAction:\t\tHit the bottom wall, running away";
 		}
 	}
 	return ret;

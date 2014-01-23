@@ -6,17 +6,19 @@
 
 //  Include files
 #include "stdhd.h"
-#include "environment.h"
 #include "dummyAgent.h"
+#include "environment.h"
 
 //  Global variables
 int	 	STEPS = 1;
 char 	FNAME[] = "geo.mp";
+Cell*	START;
 
 //  Function declarations
 void 	createMap();
 void	displayMap();
 Cell* findCell(int);
+int		retType(char*);
 
 //Main function
 int main( ){
@@ -26,19 +28,24 @@ int main( ){
 }
 
 // FUNCTIONS
-void  createMap(){
-	char	tType;
-	int		ttType;
-	int		tLeft, tUp;
-	int		tKey = 0;
-	ifstream map( FNAME );
-	while( !map.eof() && map >> tType >> tLeft >> tUp ){
-		if( 		 tType == 'C' )	ttType = OPEN;
-		else if( tType == 'W' ) ttType = WALL;
-		else if( tType == 'O' ) ttType = OBSTACLE;
+int retType(char tType){
+	if( 		 tType == 'W' ) return WALL;
+	else if( tType == 'O' ) return OBSTACLE;
+	else										return OPEN;
+}
 
-		tKey++;
-		Cell* x = new Cell(tKey, false, ttType);
+void  createMap(){
+	int		ttType, tLeft, tUp, tKey = 0;
+	char	tType;
+	ifstream map( FNAME );
+	
+	if( !map.eof() && map >> tType >> tLeft >> tUp ){
+		ttType = retType( tType); 
+		START = new Cell( ++tKey, false, ttType );
+	}
+	while( !map.eof() && map >> tType >> tLeft >> tUp ){
+		ttType = retType( tType ); 
+		Cell* x = new Cell( ++tKey, false, ttType );
 		x->setNeighbors( findCell(tLeft), findCell(0), findCell(tUp), findCell(0) );
 	} 
 }
@@ -46,6 +53,7 @@ void  createMap(){
 Cell*	findCell(int id){
 	if( id <= 0 )		return NULL;
 	Cell *x;
+	x = START;
 	return x;
 }
 

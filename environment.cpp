@@ -11,7 +11,8 @@
   \date   20140120 - Magnus Øverbø
 **/
 Cell::Cell(){
-  dirty = false;
+  key		= -1;
+	dirty = false;
   age   = 0;
   left  = NULL;
   right = NULL;
@@ -23,7 +24,8 @@ Cell::Cell(){
   \brief  Constructor with set state for dirty
   \date   20140120 - Magnus Øverbø
 **/
-Cell::Cell( bool tDirt, int tType){
+Cell::Cell( int tKey, bool tDirt, int tType){
+	key		= tKey;
   dirty = tDirt;
 	type	= tType;
   age   = 0;
@@ -37,7 +39,8 @@ Cell::Cell( bool tDirt, int tType){
   \brief  Constructor with set state for dirty
   \date   20140120 - Magnus Øverbø
 **/
-Cell::Cell( bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d){
+Cell::Cell( int tKey, bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d){
+	key		= tKey;
   dirty = tDirt;
 	type	= tType;
   age   = 0;
@@ -54,53 +57,51 @@ Cell::Cell( bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d){
 Cell::~Cell(){}
 
 /**
-  \brief  Sets the neighbor and the backlink
+  \brief  Sets the the objects link to the neighbor
   \date   20140120 - Magnus Øverbø
 **/
 void  Cell::setNeighbor(int id, Cell *pointer, Cell* cur){
-  if(pointer != NULL && id >= 1 && id <= 4){
+	if( pointer != NULL && id >= LEFT && id <= DOWN){
 		if( id == LEFT){
 			left = pointer;
-			left->setNeighbor(LEFT, cur);
+			left->setNeighbor(RIGHT, cur);
 		}
 		else if( id == RIGHT){
 			right = pointer;
-			right->setNeighbor(RIGHT, cur);
+			right->setNeighbor(LEFT, cur);
 		}
 		else if( id == UP){
 			up=pointer;
-			up->setNeighbor(UP, cur);
+			up->setNeighbor(DOWN, cur);
 		}
 		else if( id == DOWN){
 			down = pointer;	
-			down->setNeighbor(DOWN, cur);
+			down->setNeighbor(UP, cur);
 		}
   }
 }
-
-// Sets the pointer for the neighboring cell
-void  Cell::setNeighbor(int id, Cell *pointer){
-  if(pointer != NULL && id >= 1 && id <= 4){
-		if( id == LEFT){
-			left = pointer;
-		}
-		else if( id == RIGHT){
-			right = pointer;
-		}
-		else if( id == UP){
-			up=pointer;
-		}
-		else if( id == DOWN){
-			down = pointer;	
-		}
-  }
-}
-
 void Cell::setNeighbors(Cell* l, Cell* r, Cell* u, Cell* d){
 	if( l != NULL )		setNeighbor(LEFT, 	l, this);
 	if( r != NULL )		setNeighbor(RIGHT, 	r, this);
-	if( u != NULL )		setNeighbor(UP, 	u, this);
+	if( u != NULL )		setNeighbor(UP, 		u, this);
 	if( d != NULL )		setNeighbor(DOWN, 	d, this);
+}
+void  Cell::setNeighbor(int id, Cell *pointer){
+	if( pointer != NULL && id >= LEFT && id <= DOWN){
+		if( id == LEFT){
+			left = pointer;
+		}
+		else if( id == RIGHT){
+			right = pointer;
+		}
+		else if( id == UP){
+			up=pointer;
+		}
+		else if( id == DOWN){
+			down = pointer;	
+		}
+  }
+	else cout << "pointer is null";
 }
 
 
@@ -197,18 +198,57 @@ bool  Cell::getDirty(){
   \date   20140120 - Magnus Øverbø
 **/
 void Cell::display(){
-  cout << "\nDirty:\t" << (( dirty ) ? "true" : "false" );
-  cout << "\t\tAge:\t"   << age << " since cleaned";
-  //cout << "\nAbove:\t" << (( up    == NULL ) ? "Void" : "Cell" );
-  //cout << "\nBelow:\t" << (( down  == NULL ) ? "Void" : "Cell" );
-  //cout << "\nLeft:\t"  << (( left  == NULL ) ? "Void" : "Cell" );
-  //cout << "\nRight:\t" << (( right == NULL ) ? "Void" : "Cell" );
-	//cout << "\n\n";
+	getID();
+	cout << " ("; getType(); cout << ")";
+  cout << "\n---------------------------------------------------------------\n";
+	//cout << "\n\tDirty:\t" << (( dirty ) ? "true" : "false" ); 
+  //cout << "\tAge:\t"   << age << " since cleaned\t\t";
+  //cout << "\n\tLeft:\t";
+		if ( left  == NULL ) cout << "NONE\t";
+		else{
+				left->getID();
+				cout << "("; left->getType(); cout << ")\t";
+		}
+
+  //cout << "\tRight:\t";
+		if ( right  == NULL ) cout << "NONE\t";
+		else{
+				right->getID();
+				cout << "("; right->getType(); cout << ")\t";
+		}
+
+  //cout << "\tAbove:\t";
+		if ( up  == NULL ) cout << "NONE\t";
+		else{
+				up->getID();
+				cout << " ("; up->getType(); cout << ")\t";
+		}
+
+  //cout << "\tBelow:\t";
+		if ( down  == NULL ) cout << "NONE\t";
+		else{
+				down->getID();
+				cout << "("; down->getType(); cout << ")\t";
+		}
+	cout << "\n\n";
+}
+
+void Cell::getType(){
+	if( type == OPEN )
+		cout << "OPEN";
+	else if( type == OBSTACLE )
+		cout << "Obstacle";
+	else
+		cout << "Wall";
 }
 
 bool Cell::isSpace(){
 	if( type == OPEN )
 		return true;
 	return false;
+}
+
+void Cell::getID(){
+	cout << key;
 }
 

@@ -15,6 +15,12 @@ char 	FNAME[] = "geo.mp";
 int 	LAST_KEY;
 Cell*	START;
 
+/**
+	\brief	Creates a stack/list with pointer to a cell.
+	
+	Used for searching the graph
+	\date		20140124 - Magnus Øverbø
+**/
 struct List{
 	Cell* info;
 	List* n;
@@ -38,12 +44,24 @@ int main( ){
 }
 
 // FUNCTIONS
+/**
+	\brief	Returns the int value of the TYPE in the geo.mp file.
+	\date		20140124 - Magnus Øverbø
+**/
 int retType(char tType){
 	if( 		 tType == 'W' ) return WALL;
 	else if( tType == 'O' ) return OBSTACLE;
 	else										return OPEN;
 }
 
+/**
+  \brief	Creeates the map from the file geo.mp which holds the map
+
+	the file format is [TYPE] [LEFT] [UP] where the TYPE is W, O C, and LEFT/UP is
+	the key for the neighboring cell.  When these are set the existing node will
+	automatically link back to the new node.
+  \date		20140124 - Magnus Øverbø
+**/
 void  createMap(){
 	int		ttType, tLeft, tUp, tKey = 0;
 	char	tType;
@@ -65,6 +83,14 @@ void  createMap(){
 }
 
 
+/**
+  \brief	Finds the cell by doing a depht first search of the graph
+
+	It creates a list/stack where the down and right neighbor of the cell is
+	pushed on, then it will move to the next on the list and check its key, if
+	found it will return the cell. It makes the assumption that the key exists
+  \date 	20140124 - Magnus Øverbø
+**/
 Cell*	findCell(int id){
 	if( id <= 0 )		return NULL;
 	Cell* ret;
@@ -88,8 +114,13 @@ Cell*	findCell(int id){
 	return ret;
 }
 
+/**
+  \brief	Displays the map by going through keys made during generation one by
+	one and printing their type
+  \date 	20140124 - Magnus Øverbø
+**/
 void displayMap(){
-	Cell *a;
+	Cell *a;	//< Temporary holder for the retrieved cell
 	for( int i=1; i<= LAST_KEY; i++){
 		a = findCell( i );
 		a->getType(); cout << ' ';

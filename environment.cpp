@@ -242,11 +242,18 @@ void Cell::display(){
 // Prints the type of cell
 void Cell::getType(){
 	if( type == OPEN )
-		cout << "OPEN";
+		cout << "S";
+		//cout << "OPEN";
 	else if( type == OBSTACLE )
-		cout << "Obstacle";
+		cout << "O";
+		//cout << "Obstacle";
 	else
-		cout << "Wall";
+		cout << "W";
+		//cout << "Wall";
+}
+
+int Cell::retType(){
+	return type;
 }
 
 /**

@@ -51,7 +51,10 @@ class Cell{
     
 		void  display();
 		bool	isSpace();
+		
+		int		retType();
 		void	getType();
+
 		void	getID();
 		bool	checkID( int );
 };

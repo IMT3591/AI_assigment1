@@ -56,6 +56,7 @@ class Cell{
 		void	getType();
 
 		void	getID();
+		int		retID();
 		bool	checkID( int );
 };
 

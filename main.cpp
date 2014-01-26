@@ -10,25 +10,11 @@
 #include "environment.h"
 
 //  Global variables
-int	 	STEPS = 1;
-char 	FNAME[] = "geo.mp";
-int 	LAST_KEY;
-Cell*	START;
-
-/**
-	\brief	Creates a stack/list with pointer to a cell.
-	
-	Used for searching the graph
-	\date		20140124 - Magnus Øverbø
-**/
-struct List{
-	Cell* info;
-	List* n;
-	List ( Cell* i){
-		info = i;
-		n = NULL;
-	}
-};
+int	 		STEPS = 10;
+char 		FNAME[] = "geo.mp";
+int 		LAST_KEY;
+Cell*		START;
+Agent*	bender;
 
 //  Function declarations
 void 	createMap();
@@ -39,7 +25,12 @@ int		retType(char*);
 //Main function
 int main( ){
 	createMap();
+	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
 	displayMap();
+	for( int a = 0; a<STEPS; a++ ){
+		bender->move();
+		displayMap();
+	}
 	return 0;
 }
 
@@ -123,7 +114,10 @@ void displayMap(){
 	Cell *a;	//< Temporary holder for the retrieved cell
 	for( int i=1; i<= LAST_KEY; i++){
 		a = findCell( i );
-		a->getType(); cout << ' ';
+		if ( i == bender->retLocID() )
+			cout << "B";
+		else a->getType();
+		cout << ' ';
 		if( a->getNeighbor(RIGHT) == NULL )
 			cout << '\n';
 	}

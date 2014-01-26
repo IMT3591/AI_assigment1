@@ -281,3 +281,7 @@ bool Cell::checkID( int id){
 }
 
 
+int Cell::retID(){
+	return key;
+}
+

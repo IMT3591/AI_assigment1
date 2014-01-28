@@ -32,6 +32,7 @@ Agent::Agent(Cell* tLocation){
 	run 				= true;
 	performance = INIT_PERFORMANCE;
 	swipeNumber = 1;
+	STEPS				= 100;
 }
 
 /**
@@ -132,6 +133,7 @@ void Agent::updateLocation( int loc ){
 	\param	perf	Integer to add to current performance value
 **/
 void Agent::action(const char txt[], int perf){
+	STEPS--; 
 	performance += perf;
 	cout << "\nAction:\t" << txt;
 }
@@ -152,5 +154,43 @@ bool Agent::clean(){
 
 int Agent::retLocID(){
 	return current->retID();
+}
+
+void Agent::visit( Cell* cur ){
+	Cell* l, *r, *u, *d;
+	l = cur->getNeighbor( LEFT );
+	r = cur->getNeighbor( RIGHT );
+	u = cur->getNeighbor( UP );
+	d = cur->getNeighbor( DOWN );
+
+	if( STEPS == 0 )	return;
+	
+	if( cur->isSpace() && !cur->retVisited()){
+		cur->setVisited();
+		if( cur->getDirty() ){
+			action( "Cleaning cell, performance point awarded.", 1 );
+			clean();
+		}
+		if( l != NULL ){
+			action( "Moving to the left, performance point withdrawn.", -1);
+			visit( l );
+		}
+		if( r != NULL ){
+			action( "Moving to the right, performance point withdrawn.", -1);
+			visit( r );
+		}
+		if( u != NULL ){
+			action( "Moving up, performance point withdrawn.", -1);
+			visit( u );
+		}
+		if( d != NULL ){
+			action( "Moving down, performance point withdrawn.", -1);
+			visit( d );
+		}
+	}
+	else{
+		action( "Hit the wall, retreat.", 1);
+		return;
+	}
 }
 

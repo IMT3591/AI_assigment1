@@ -1,20 +1,7 @@
-/**
-  \file main.cpp
-  \date 20140120 - Magnus Øverbø
-  \brief Main driver for the agent and environment
-**/
 
-//  Include files
 #include "stdhd.h"
 #include "dummyAgent.h"
 #include "environment.h"
-
-//  Global variables
-int	 		STEPS = 100;
-char 		FNAME[] = "..\\geo.mp";
-int 		LAST_KEY;
-Cell*		START;
-Agent*	bender;
 
 //  Function declarations
 void 	createMap();
@@ -22,16 +9,30 @@ void	displayMap();
 Cell* findCell(int);
 int		retType(char*);
 
+//  Global variables
+int			STEPS = 1000;
+//char 		FNAME[] = "..\\geo.mp";
+char 		FNAME[] = "geo.mp";
+int 		LAST_KEY;
+Cell*		START;
+Agent*	bender;
+
 //Main function
 int main( ){
 	createMap();
 	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
 	displayMap();
+	
+	bender->visit( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
+	//START );	//recursive function for visiting
+	cout << "Finished with: " << STEPS << " left.\n";
+	
+	/*
 	for( int a = 0; a<STEPS; a++ ){
 		system("cls");
 		bender->move();
 		displayMap();
-	}
+	}*/
 	return 0;
 }
 

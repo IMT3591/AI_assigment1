@@ -40,7 +40,7 @@ class Agent{
 	bool 	run;					/*< Working state*/
 	int 	performance;	/*< Performance counter for the agent */
 	int 	swipeNumber;	/*< Number of swipes around the hole environment */
-
+	int		STEPS;
   public:
 	Agent();
 	Agent( Cell* );
@@ -50,6 +50,7 @@ class Agent{
 	void action( const char txt[], int);
 	void updateLocation( int );
 	int	 retLocID();
+	void visit( Cell* );
 };
 
 #endif  // __AGENT_H_INCLUDED__

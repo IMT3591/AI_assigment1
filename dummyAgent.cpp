@@ -20,6 +20,7 @@ Agent::Agent(){
 	performance = INIT_PERFORMANCE;
 	swipeNumber = -1;
 	STEPS				= INIT_STEPS;
+	corner			= false;
 }
 
 /**
@@ -34,6 +35,7 @@ Agent::Agent(Cell* tLocation){
 	performance = INIT_PERFORMANCE;
 	swipeNumber = -1;
 	STEPS				= INIT_STEPS;
+	corner			= false;
 }
 
 /**
@@ -53,65 +55,55 @@ Agent::~Agent(){}
 	\date		20140122 - Magnus Øverbø
 **/
 void Agent::move(){
+	current->setVisited();
 	if( swipeNumber >= 1 ){
-		if( current->getDirty() ){		//	If current location is dirty, clean it
-			clean();
-			action("Cleaned the cell", 1);
-		}
-		// STOP
-		else if( lastMove == UP && current == memoryMap ){
-			cout << "\nAction:\tI've cleaned the room. It's siesta time... FOREVER";
-		}
-		else{													//If location is not dirty
-			if( current->isSpace() ){		//If location isn't a wall or obstacle
-				if( lastMove == UP ){			//If previous movement was UP
-					swipeNumber++;					//Increment the swipenumber
-					if( swipeNumber%2 == 1){//Move left if odd swipenumber
-						updateLocation( LEFT );
-						action("Moved to the left", -1);
-					}
-					else{
-						updateLocation( RIGHT );
-						action("Moved to the right", -1);
-					}
-				}	// lastMove == UP
-				//if previous movement was down, left or right
+		if( current->isSpace() ){		//If location isn't a wall or obstacle
+			if( lastMove == UP ){			//If previous movement was UP
+				swipeNumber++;					//Increment the swipenumber
+				if( swipeNumber%2 == 1){//Move left if odd swipenumber
+					updateLocation( LEFT );
+					action("Moved to the left", -1);
+				}
 				else{
-					updateLocation( lastMove );
-					switch(lastMove){
-						case DOWN: 	action( "Moved down", -1 );				break;
-						case LEFT:	action( "Moved to the left", -1 );		break;
-						case RIGHT: action( "Moved to the right", -1 );		break;
-					};
-				} //Lastmove == DOWN | LEFT | RIGHT
-			}
-			else if( lastMove==UP ){	// If current location is an obstacle or wall
-				updateLocation( DOWN );
-				action( "Hit the upper wall, running away", -1);
-			}// lastMove == UP
-			else if( lastMove==RIGHT ){
-				if(swipeNumber%2==0){
-					current=current->getNeighbor(LEFT)->getNeighbor(UP);
-					lastMove=UP;
-				}else updateLocation( LEFT );
-				action( "Hit the right wall, running away", -1);
-			} // lastMove == RIGHT
-			else if( lastMove==LEFT ){
-				if( swipeNumber%2==1){
-					current=current->getNeighbor(RIGHT)->getNeighbor(UP);
-					lastMove=UP;
-				}else	updateLocation( RIGHT );
-				action( "Hit the left wall, running away", -1);
-			} // LastMove == LEFT
-			else if( lastMove==DOWN ){
-				current=current->getNeighbor( UP );
-				++swipeNumber;
-				lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
-				action( "Hit the bottom wall, running away", -1);
-			}// lastMove == DOWN
-		}// end !is_space();
-		current->setVisited();
-	}else findCorner();
+					updateLocation( RIGHT );
+					action("Moved to the right", -1);
+				}
+			}	// lastMove == UP
+			//if previous movement was down, left or right
+			else {
+				updateLocation( lastMove );
+				switch(lastMove){
+					case DOWN: 	action( "Moved down", -1 );						break;
+					case LEFT:	action( "Moved to the left", -1 );		break;
+					case RIGHT: action( "Moved to the right", -1 );		break;
+				};
+			} //Lastmove == DOWN | LEFT | RIGHT
+		}
+		else if( lastMove==UP ){	// If current location is an obstacle or wall
+			updateLocation( DOWN );
+			action( "Hit the upper wall, running away", -1);
+		}// lastMove == UP
+		else if( lastMove==RIGHT ){
+			if(swipeNumber%2==0){
+				current=current->getNeighbor(LEFT)->getNeighbor(UP);
+				lastMove=UP;
+			}else updateLocation( LEFT );
+			action( "Hit the right wall, running away", -1);
+		} // lastMove == RIGHT
+		else if( lastMove==LEFT ){
+			if( swipeNumber%2==1){
+				current=current->getNeighbor(RIGHT)->getNeighbor(UP);
+				lastMove=UP;
+			}else	updateLocation( RIGHT );
+			action( "Hit the left wall, running away", -1);
+		} // LastMove == LEFT
+		else if( lastMove==DOWN ){
+			current=current->getNeighbor( UP );
+			++swipeNumber;
+			lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
+			action( "Hit the bottom wall, running away", -1);
+		}// lastMove == DOWN
+	}// end !is_space();
 } // end Function
 
 /**
@@ -144,10 +136,10 @@ void Agent::action(const char txt[], int perf){
 	\retval false	If the cell is still dirty
 **/
 bool Agent::clean(){
+	action( "Cleaning cell, performance point awarded.", 1 );
 	current->setDirty( false );
 	current->resetAge();
-	if( !current->getDirty() )
-		return true;
+	if( !current->getDirty() )		return true;
 	return false;
 }
 
@@ -162,11 +154,11 @@ void Agent::visit( Cell* cur ){
 	r = cur->getNeighbor( RIGHT );
 	u = cur->getNeighbor( UP );
 	d = cur->getNeighbor( DOWN );
+
 	if( cur->isSpace() && !cur->retVisited()){
 		current = cur;
 		cur->setVisited();
 		if( cur->getDirty()  && STEPS != 0){
-			action( "Cleaning cell, performance point awarded.", 1 );
 			clean();
 		}
 		if( l != NULL && STEPS != 0){
@@ -197,22 +189,30 @@ void Agent::visit( Cell* cur ){
 	}
 }
 
+/**
+	\brief	Moves left and down untill it hits both walls or NULL. then it has
+	found the bottom left corner.
+**/
 void Agent::findCorner(){
-	if( swipeNumber == -1){
-		if( current->isSpace() ){
+	if( swipeNumber == -1 ){
+		if( current->isSpace() && current->getNeighbor(DOWN) != NULL) {
 			updateLocation(DOWN);
 			action( "Trying to find the starting point.", -1 );
-		}else{
-			updateLocation(UP);
+		}
+		else{
+			if( !current->isSpace() )	updateLocation(UP);
 			swipeNumber++;
 			action( "Found bottom row, looking for the corner.", -1);
 		}
-	}else if( swipeNumber == 0 ){
-		if( current->isSpace() ){
+	}
+	else if( swipeNumber == 0 ){
+		if( current->isSpace() && current->getNeighbor(LEFT) != NULL ){
 			updateLocation(LEFT);
 			action( "Walking my way to the bottom left corener, nearly there", -1);
-		}else{
-			updateLocation(RIGHT);
+		}
+		else{
+			if( !current->isSpace() ) updateLocation(RIGHT);
+			corner = true;
 			swipeNumber++;
 			action( "Found it! let's start cleaning", -1 );
 		}
@@ -233,4 +233,8 @@ int Agent::retSteps(){
 
 Cell* Agent::getCurrent(){
 	return current;
+}
+
+bool Agent::foundCorner(){
+	return corner;
 }

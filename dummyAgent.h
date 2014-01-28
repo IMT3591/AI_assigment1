@@ -41,6 +41,7 @@ class Agent{
 	int 	performance;	/*< Performance counter for the agent */
 	int 	swipeNumber;	/*< Number of swipes around the hole environment */
 	int		STEPS;
+	bool	corner;
   public:
 	Agent();
 	Agent( Cell* );
@@ -56,6 +57,7 @@ class Agent{
 	int	retSteps();
 	Cell* getCurrent();
 	void findCorner();
+	bool foundCorner();
 };
 
 #endif  // __AGENT_H_INCLUDED__

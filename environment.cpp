@@ -13,6 +13,7 @@
 Cell::Cell(){
   key		= -1;
 	dirty = false;
+	visited = false;
   age   = 0;
   left  = NULL;
   right = NULL;
@@ -121,7 +122,7 @@ void  Cell::setNeighbor(int id, Cell *pointer){
 **/
 Cell* Cell::getNeighbor( int id ){
   Cell* ret = NULL;
-  if( id >= 1 && id <= 4 ){
+  if( LEFT >= 0 && id <= DOWN ){
 		if( id == LEFT)				ret = left;
 		else if( id == RIGHT)	ret = right;
 		else if( id == UP)		ret = up;
@@ -285,3 +286,10 @@ int Cell::retID(){
 	return key;
 }
 
+bool Cell::retVisited(){
+	return visited;
+}
+
+void  Cell::setVisited(){
+	visited = true;
+}

@@ -21,10 +21,11 @@ enum TYPE{ OPEN, WALL, OBSTACLE };				/*< Enum giving the type of cell */
 class Cell{
   private:
     int		key;			/*< Integer indicating the ID of the cell */
-		bool  dirty;    /*< Boolean value to indicate if the cell is dirty */
+	bool  dirty;    /*< Boolean value to indicate if the cell is dirty */
     int   age;      /*< Integer indicating time it's was last cleaning */
-		int		type;			/*< Integer indicatiing the type of cell(Wall, object or
+	int		type;			/*< Integer indicatiing the type of cell(Wall, object or
 											open */
+	bool	visited;
     Cell  *left,    /*< Pointer to the left neighbor cell */
           *right,   /*< Pointer to the right neighbor cell */ 
           *up,      /*< Pointer to the above neighbor cell */
@@ -58,6 +59,9 @@ class Cell{
 		void	getID();
 		int		retID();
 		bool	checkID( int );
+
+		bool	retVisited();
+		void	setVisited();
 };
 
 #endif  // __ENVIRONMENT_H_INCLUDED__ 

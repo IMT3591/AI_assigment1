@@ -10,8 +10,8 @@
 #include "environment.h"
 
 //  Global variables
-int	 		STEPS = 10;
-char 		FNAME[] = "geo.mp";
+int	 		STEPS = 100;
+char 		FNAME[] = "..\\geo.mp";
 int 		LAST_KEY;
 Cell*		START;
 Agent*	bender;
@@ -28,6 +28,7 @@ int main( ){
 	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
 	displayMap();
 	for( int a = 0; a<STEPS; a++ ){
+		system("cls");
 		bender->move();
 		displayMap();
 	}
@@ -62,6 +63,7 @@ void  createMap(){
 		ttType = retType( tType); 
 		START = new Cell( ++tKey, false, ttType );
 	}
+	else cout << "SOMETHING FUCKED UP";
 	while( !map.eof() && map >> tType >> tLeft >> tUp ){
 		ttType = retType( tType ); 
 		Cell* x = new Cell( ++tKey, false, ttType );
@@ -112,9 +114,12 @@ Cell*	findCell(int id){
 **/
 void displayMap(){
 	Cell *a;	//< Temporary holder for the retrieved cell
+	cout << "\n";
 	for( int i=1; i<= LAST_KEY; i++){
 		a = findCell( i );
 		if ( i == bender->retLocID() )
+			cout << "H";
+		else if( a->retVisited() == true )
 			cout << "B";
 		else a->getType();
 		cout << ' ';

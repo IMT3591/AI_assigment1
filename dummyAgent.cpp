@@ -56,14 +56,14 @@ void Agent::move(){
 		action("Cleaned the cell", 1);
 	}
 	// STOP
-	else if( lastMove == UP && current == memoryMap ){
+	/*else if( lastMove == UP && current == memoryMap ){
 		cout << "\nAction:\tIve cleaned the room. It's siesta time... FOREVER";
 	}
 	//NO OPERATION BECAUSE THE CURRENT LOCATION HAS A GOOD CHANCE OF BECOMING
 	//DIRTY AGAIN
 	else if( current->getAge() >= 10 && !current->getDirty() ){
 		cout << "\nAction:\tIt's siesta time. Until This spot becomes dirty again";
-	}
+	}*/
 	else{													//If location is not dirty
 		if( current->isSpace() ){		//If location isn't a wall or obstacle
 			if( lastMove == UP ){			//If previous movement was UP
@@ -78,7 +78,7 @@ void Agent::move(){
 				}
 			}	// lastMove == UP
 			//if previous movement was down, left or right
-			else if( lastMove == DOWN || lastMove == LEFT || lastMove == RIGHT){
+			else{
 				updateLocation( lastMove );
 				switch(lastMove){
 					case DOWN: 	action( "Moved down", -1 );						break;
@@ -95,26 +95,23 @@ void Agent::move(){
 			if(swipeNumber%2==0){
 				current=current->getNeighbor(LEFT)->getNeighbor(UP);
 				lastMove=UP;
-			}
-			else		updateLocation( LEFT );
+			}else		updateLocation( LEFT );
 			action( "Hit the right wall, running away", -1);
 		} // lastMove == RIGHT
 		else if( lastMove==LEFT ){
 			if( swipeNumber%2==1){
 				current=current->getNeighbor(RIGHT)->getNeighbor(UP);
 				lastMove=UP;
-			}else{
-				updateLocation( RIGHT );
-			}
+			}else	updateLocation( RIGHT );
 			action( "Hit the left wall, running away", -1);
 		} // LastMove == LEFT
-		
 		else if( lastMove==DOWN ){
 			current=current->getNeighbor( UP );
 			lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
 			action( "Hit the bottom wall, running away", -1);
 		}// lastMove == DOWN
 	}// end !is_space();
+	current->setVisited();
 } // end Function
 
 /**

@@ -105,7 +105,7 @@ void Agent::move(){
 			} // LastMove == LEFT
 			else if( lastMove==DOWN ){
 				current=current->getNeighbor( UP );
-				++swipeCurrent;
+				++swipeNumber;
 				lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
 				action( "Hit the bottom wall, running away", -1);
 			}// lastMove == DOWN
@@ -205,7 +205,7 @@ void Agent::findCorner(){
 		}else{
 			updateLocation(UP);
 			swipeNumber++;
-			action( "Found bottom row, looking for the corner.", -1):
+			action( "Found bottom row, looking for the corner.", -1);
 		}
 	}else if( swipeNumber == 0 ){
 		if( current->isSpace() ){
@@ -213,7 +213,7 @@ void Agent::findCorner(){
 			action( "Walking my way to the bottom left corener, nearly there", -1);
 		}else{
 			updateLocation(RIGHT);
-			swipeNuber++;
+			swipeNumber++;
 			action( "Found it! let's start cleaning", -1 );
 		}
 	}

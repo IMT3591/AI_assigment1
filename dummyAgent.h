@@ -55,6 +55,7 @@ class Agent{
 	void printPerf();
 	int	retSteps();
 	Cell* getCurrent();
+	void findCorner();
 };
 
 #endif  // __AGENT_H_INCLUDED__

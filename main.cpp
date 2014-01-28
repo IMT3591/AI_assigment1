@@ -1,5 +1,6 @@
 
 #include "stdhd.h"
+#include <ctime>
 #include "dummyAgent.h"
 #include "environment.h"
 
@@ -11,28 +12,29 @@ int		retType(char*);
 
 //  Global variables
 int			STEPS = 1000;
-//char 		FNAME[] = "..\\geo.mp";
-char 		FNAME[] = "geo.mp";
+char 		FNAME[] = "..\\geo.mp";
+//char 		FNAME[] = "geo.mp";
 int 		LAST_KEY;
 Cell*		START;
 Agent*	bender;
 
 //Main function
 int main( ){
+	srand( time(0) );
 	createMap();
-	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
-	displayMap();
+	bender 	= new Agent( START );//START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
 	
-	bender->visit( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
-	//START );	//recursive function for visiting
-	cout << "Finished with: " << STEPS << " left.\n";
-	
-	/*
-	for( int a = 0; a<STEPS; a++ ){
-		system("cls");
-		bender->move();
 		displayMap();
-	}*/
+	for( int i=0; i<STEPS; i++){
+		bender->move();
+	}
+	
+	//	Recursive algorithm, it works but has a very low performance
+	//bender->visit( bender->getCurrent() );
+	
+	cout << "Finished with: "; bender->printSteps(); cout << " left.\n";
+	cout << "Performance: "; bender->printPerf(); cout << " points\n";
+	displayMap();
 	return 0;
 }
 
@@ -57,6 +59,7 @@ int retType(char tType){
 **/
 void  createMap(){
 	int		ttType, tLeft, tUp, tKey = 0;
+	bool	tDirt = false;
 	char	tType;
 	ifstream map( FNAME );
 	
@@ -64,10 +67,13 @@ void  createMap(){
 		ttType = retType( tType); 
 		START = new Cell( ++tKey, false, ttType );
 	}
-	else cout << "SOMETHING FUCKED UP";
+	else cout << "Couldn't read the file, check it's location";
 	while( !map.eof() && map >> tType >> tLeft >> tUp ){
-		ttType = retType( tType ); 
-		Cell* x = new Cell( ++tKey, false, ttType );
+		ttType = retType( tType );
+		//if(ttType == OPEN)
+		//	tDirt = (( rand() % 2 ) ? true : false);
+		//else tDirt = false;
+		Cell* x = new Cell( ++tKey, tDirt, ttType );
 		x->setNeighbors( findCell(tLeft), findCell(0), findCell(tUp), findCell(0) );
 		tType = WALL;
 		tLeft = 0;

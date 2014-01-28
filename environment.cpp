@@ -12,13 +12,14 @@
 **/
 Cell::Cell(){
   key		= -1;
-	dirty = false;
+	dirty = true;
 	visited = false;
   age   = 0;
   left  = NULL;
   right = NULL;
   up    = NULL;
   down  = NULL;
+  visited = false;
 }
 
 /**
@@ -34,6 +35,7 @@ Cell::Cell( int tKey, bool tDirt, int tType){
   right = NULL;
   up    = NULL;
   down  = NULL;
+  visited = false;
 }
 
 /**
@@ -49,6 +51,7 @@ Cell::Cell( int tKey, bool tDirt, int tType, Cell* l, Cell* r, Cell* u, Cell* d)
   right = NULL;
   up    = NULL;
   down  = NULL;
+  visited = false;
 	setNeighbors( l, r, u, d );
 }
 
@@ -280,7 +283,6 @@ bool Cell::checkID( int id){
 	if( key == id )	return true;
 	return false;
 }
-
 
 int Cell::retID(){
 	return key;

@@ -51,6 +51,10 @@ class Agent{
 	void updateLocation( int );
 	int	 retLocID();
 	void visit( Cell* );
+	void printSteps();
+	void printPerf();
+	int	retSteps();
+	Cell* getCurrent();
 };
 
 #endif  // __AGENT_H_INCLUDED__

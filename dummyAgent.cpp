@@ -7,7 +7,7 @@
 #include "dummyAgent.h"
 
 int INIT_PERFORMANCE = 0;
-
+int INIT_STEPS = 1000;
 /**
 	\brief 	Constructor
 	\date		20140122 - Magnus Øverbø
@@ -19,6 +19,7 @@ Agent::Agent(){
 	run 				= true;
 	performance = INIT_PERFORMANCE;
 	swipeNumber = 1;
+	STEPS				= INIT_STEPS;
 }
 
 /**
@@ -32,7 +33,7 @@ Agent::Agent(Cell* tLocation){
 	run 				= true;
 	performance = INIT_PERFORMANCE;
 	swipeNumber = 1;
-	STEPS				= 100;
+	STEPS				= INIT_STEPS;
 }
 
 /**
@@ -57,14 +58,9 @@ void Agent::move(){
 		action("Cleaned the cell", 1);
 	}
 	// STOP
-	/*else if( lastMove == UP && current == memoryMap ){
-		cout << "\nAction:\tIve cleaned the room. It's siesta time... FOREVER";
+	else if( lastMove == UP && current == memoryMap ){
+		cout << "\nAction:\tI've cleaned the room. It's siesta time... FOREVER";
 	}
-	//NO OPERATION BECAUSE THE CURRENT LOCATION HAS A GOOD CHANCE OF BECOMING
-	//DIRTY AGAIN
-	else if( current->getAge() >= 10 && !current->getDirty() ){
-		cout << "\nAction:\tIt's siesta time. Until This spot becomes dirty again";
-	}*/
 	else{													//If location is not dirty
 		if( current->isSpace() ){		//If location isn't a wall or obstacle
 			if( lastMove == UP ){			//If previous movement was UP
@@ -82,7 +78,7 @@ void Agent::move(){
 			else{
 				updateLocation( lastMove );
 				switch(lastMove){
-					case DOWN: 	action( "Moved down", -1 );						break;
+					case DOWN: 	action( "Moved down", -1 );				break;
 					case LEFT:	action( "Moved to the left", -1 );		break;
 					case RIGHT: action( "Moved to the right", -1 );		break;
 				};
@@ -157,40 +153,60 @@ int Agent::retLocID(){
 }
 
 void Agent::visit( Cell* cur ){
+	if( STEPS == 0) return;
 	Cell* l, *r, *u, *d;
 	l = cur->getNeighbor( LEFT );
 	r = cur->getNeighbor( RIGHT );
 	u = cur->getNeighbor( UP );
 	d = cur->getNeighbor( DOWN );
-
-	if( STEPS == 0 )	return;
-	
 	if( cur->isSpace() && !cur->retVisited()){
+		current = cur;
 		cur->setVisited();
-		if( cur->getDirty() ){
+		if( cur->getDirty()  && STEPS != 0){
 			action( "Cleaning cell, performance point awarded.", 1 );
 			clean();
 		}
-		if( l != NULL ){
+		if( l != NULL && STEPS != 0){
 			action( "Moving to the left, performance point withdrawn.", -1);
 			visit( l );
 		}
-		if( r != NULL ){
+		if( r != NULL  && STEPS != 0){
 			action( "Moving to the right, performance point withdrawn.", -1);
 			visit( r );
 		}
-		if( u != NULL ){
+		if( u != NULL  && STEPS != 0){
 			action( "Moving up, performance point withdrawn.", -1);
 			visit( u );
 		}
-		if( d != NULL ){
+		if( d != NULL  && STEPS != 0){
 			action( "Moving down, performance point withdrawn.", -1);
 			visit( d );
 		}
 	}
-	else{
-		action( "Hit the wall, retreat.", 1);
+	else if( cur->retVisited()  && STEPS != 0){
+		current = cur;
+		action( "Allready visited, going back.", -1);
+		return;
+	}
+	else if( !cur->isSpace()  && STEPS != 0){
+		action( "Hit the wall, retreat.", -1);
 		return;
 	}
 }
 
+
+void Agent::printPerf(){
+	cout << performance;
+}
+
+void Agent::printSteps(){
+	cout << STEPS;
+}
+
+int Agent::retSteps(){
+	return STEPS;
+}
+
+Cell* Agent::getCurrent(){
+	return current;
+}

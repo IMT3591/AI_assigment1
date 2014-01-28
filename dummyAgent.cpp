@@ -104,6 +104,7 @@ void Agent::move(){
 		} // LastMove == LEFT
 		else if( lastMove==DOWN ){
 			current=current->getNeighbor( UP );
+			++swipeCurrent;
 			lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
 			action( "Hit the bottom wall, running away", -1);
 		}// lastMove == DOWN

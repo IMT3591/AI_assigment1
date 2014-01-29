@@ -38,7 +38,8 @@ class Agent{
 	int 	lastMove;			/*< Direction where it is comming from */
 	Cell*	memoryMap;		/*< Map pf the environment stored in memory */
 	bool 	run;					/*< Working state*/
-	int 	performance;	/*< Performance counter for the agent */
+	int		moves;	/*< Performance counter for the agent */
+	int		cleans;
 	int 	swipeNumber;	/*< Number of swipes around the hole environment */
 	int		STEPS;
 	bool	corner;
@@ -48,7 +49,7 @@ class Agent{
 	~Agent();
 	void move();
 	bool clean();
-	void action( const char txt[], int);
+	void action( const char txt[] );
 	void updateLocation( int );
 	int	 retLocID();
 	void visit( Cell* );

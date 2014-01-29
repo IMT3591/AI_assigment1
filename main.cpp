@@ -12,8 +12,8 @@ int		retType(char*);
 int		calcPerfAward();
 //  Global variables
 int			STEPS = 30;
-//char 		FNAME[] = "..\\geo.mp";
-char 		FNAME[] = "geo.mp";
+char 		FNAME[] = "..\\geo.mp";
+//char 		FNAME[] = "geo.mp";
 int 		LAST_KEY;
 Cell*		START;
 List*		list;
@@ -24,27 +24,25 @@ int 		perf;
 int main( ){
 	srand( time(0) );
 	createMap();
-	List* x = list;
-	while (x != NULL ){
-		x->info->display();
-		x = x->n;
-	}
-	
-	displayMap();
 	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
-	displayMap();
 	
 	Cell* pt;
 	for( int i=0; i<STEPS; i++){
 		pt = bender->getCurrent();
-		if( pt->getDirty() )			bender->clean();
+		if( pt->getDirty() ){
+			bender->clean();
+		}
 		else {
 			if( !bender->foundCorner() )	bender->findCorner();
 			bender->move();
 		}
 		displayMap();
-		//measurePerformance();
+		perf += calcPerfAward();
 	}
+	
+	cout << "Performance:\t" << perf << "\n";
+	bender->printPerf();
+
 	/*
 	//	Recursive algorithm, it works but has a very low performance
 	bender->visit( bender->getCurrent() );
@@ -58,9 +56,9 @@ int main( ){
 	\date		20140124 - Magnus Øverbø
 **/
 int retType(char tType){
-	if( 		 tType == 'W' ) return WALL;
+	if( 	 tType == 'W' ) return WALL;
 	else if( tType == 'O' ) return OBSTACLE;
-	else										return OPEN;
+	else					return OPEN;
 }
 
 /**
@@ -77,6 +75,7 @@ void  createMap(){
 	char	tType;
 	ifstream map( FNAME );
 	
+		// Set-up the initial node
 	if( !map.eof() && map >> tType >> tLeft >> tUp ){
 		ttType = retType( tType); 
 		START = new Cell( ++tKey, false, ttType );
@@ -85,15 +84,15 @@ void  createMap(){
 	else cout << "Couldn't read the file, check it's location";
 	while( !map.eof() && map >> tType >> tLeft >> tUp ){
 		ttType = retType( tType );
-		//if(ttType == OPEN)
-		//	tDirt = (( rand() % 2 ) ? true : false);
-		//else tDirt = false;
+		if(ttType == OPEN)
+			tDirt = (( rand() % 2 ) ? true : false);
+		else tDirt = false;
 		Cell* x = new Cell( ++tKey, tDirt, ttType );
-		x->setNeighbors( findCell(tLeft), findCell(0), findCell(tUp), findCell(0) );
-		tType = WALL;		tLeft = 0;		tUp		= 0;
 		List* y = new List( x );
 		y->n = list->n;
 		list->n = y;
+		x->setNeighbors( findCell(tLeft), findCell(0), findCell(tUp), findCell(0) );
+		tType = WALL;		tLeft = 0;		tUp		= 0;
 	}
 	LAST_KEY = tKey;
 }
@@ -105,7 +104,7 @@ void  createMap(){
 Cell*	findCell(int id){
 	if( id <= 0 )		return NULL;
 	Cell* ret = NULL;		List *x = list;
-	while( x != NULL && x->info->checkID( id ) ){
+	while( x != NULL && !x->info->checkID( id ) ){
 		x = x->n;
 	}
 	if( x->info->checkID(id) )
@@ -123,10 +122,8 @@ void displayMap(){
 	cout << "\n";
 	for( int i=1; i<= LAST_KEY; i++){
 		a = findCell( i );
-		if ( i == bender->retLocID() )
-			cout << "H";
-		else if( a->retVisited() == true )
-			cout << "B";
+		if ( i == bender->retLocID() )			cout << "H";
+		else if( a->retVisited() == true )		cout << "B";
 		else a->getType();
 		cout << ' ';
 		if( a->getNeighbor(RIGHT) == NULL )
@@ -134,10 +131,14 @@ void displayMap(){
 	}
 }
 
+
+/**
+\brief Calculates current performance measure
+**/
 int calcPerfAward(){
 	List* x = list; int award=0;
 	while( x != NULL ){
-		if( !x->info->getDirty() )
+		if( !x->info->getDirty() && x->info->retType() == OPEN )
 			award++;
 		x = x->n;	
 	}

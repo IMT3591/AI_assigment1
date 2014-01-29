@@ -144,9 +144,8 @@ Cell* Cell::getNeighbor( int id ){
 **/
 bool  Cell::updateAge(){
   ++age;
-  if( age >= 5 && dirty == false ){
+  if( dirty == false && isSpace() )
     return updateDirty();
-  }
   return false;
 }
 
@@ -176,7 +175,7 @@ int   Cell::getAge(){
   \retval false Is returned if the dirty state was not updated
 **/
 bool  Cell::updateDirty(){
-  if( rand()%600 == 0 && dirty == false ){
+  if( rand()% 5 == 0 && dirty == false ){
     dirty = true;
     return true;
   }

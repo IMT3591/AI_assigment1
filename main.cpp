@@ -25,6 +25,7 @@ int main( ){
 	srand( time(0) );
 	createMap();
 	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
+	displayMap();
 	List* x=list;
 	Cell* pt;
 	for( int i=0; i<STEPS; i++){
@@ -47,6 +48,7 @@ int main( ){
 	
 	cout << "Performance:\t" << perf << "\n";
 	bender->printPerf();
+	displayMap();
 
 	/*
 	//	Recursive algorithm, it works but has a very low performance
@@ -125,17 +127,15 @@ Cell*	findCell(int id){
 void displayMap(){
 	Cell *a;	//< Temporary holder for the retrieved cell
 	cout << "\n";
-	int width = 1;
 	for( int i=1; i<= LAST_KEY; i++){
 		a = findCell( i );
-		if( a->getNeighbor( LEFT ) == NULL ){ width++; cout << "  "; }
+		if( a->getNeighbor(LEFT) == NULL ){	cout << '\n';}
 		if ( i == bender->retLocID() )			{ cout << "H"; }
 		else if( a->retVisited() == true )	{ cout << "B"; }
 		else a->getType();
-		width++;
 		cout << ' ';
-		if( width % 10 == 0){	cout << '\n'; width = 1;}
 	}
+	cout << "\n";
 }
 
 

@@ -11,7 +11,7 @@ Cell* findCell(int);
 int		retType(char*);
 int		calcPerfAward();
 //  Global variables
-int			STEPS = 30;
+int			STEPS = 1000;
 char 		FNAME[] = "..\\geo.mp";
 //char 		FNAME[] = "geo.mp";
 int 		LAST_KEY;
@@ -25,9 +25,14 @@ int main( ){
 	srand( time(0) );
 	createMap();
 	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
-	
+	List* x=list;
 	Cell* pt;
 	for( int i=0; i<STEPS; i++){
+		x=list;
+		while(x!=NULL){
+			if(x->info->isSpace() ) x->info->updateDirty();
+			x=x->n;
+		}
 		pt = bender->getCurrent();
 		if( pt->getDirty() ){
 			bender->clean();

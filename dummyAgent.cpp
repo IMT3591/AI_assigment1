@@ -30,7 +30,7 @@ Agent::Agent(Cell* tLocation){
 	moves		= 0;
 	cleans		= 0;
 	swipeNumber = -1;
-	STEPS		= INIT_STEPS;go
+	STEPS		= INIT_STEPS;
 	corner		= false;
 	current->setVisited();
 }

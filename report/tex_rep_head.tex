@@ -1,0 +1,79 @@
+
+%\usepackage[]{}
+%\usepackage[]{}
+\usepackage[english]{babel} %english, 
+\usepackage[utf8x]{inputenc} %latin1, utf8x, utf8
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\renewcommand*{\familydefault}{\rmdefault}
+
+\usepackage{geometry}
+  \addtolength{\oddsidemargin}{-1.0cm}
+  \addtolength{\evensidemargin}{-1.0cm}
+  \addtolength{\textwidth}{2.0cm}
+  \addtolength{\topmargin}{-1.0cm}
+  \addtolength{\textheight}{3.0cm}
+\usepackage{longtable}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\usepackage{lastpage}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+%\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+%\renewcommand{\chaptermark}[1]{\markright{\thesection\ #1}{}}
+%Even pages
+\fancyhead[LE]{\leftmark}
+\fancyhead[CE]{}
+\fancyhead[RE]{}
+\fancyfoot[LE]{\thepage\ of \pageref{LastPage}}
+\fancyfoot[CE]{}
+\fancyfoot[RE]{}
+%Odd pages
+\fancyhead[LO]{\thesection}
+\fancyhead[CO]{}
+\fancyhead[RO]{\emph{\thechapter}}
+\fancyfoot[LO]{}
+\fancyfoot[CO]{}
+\fancyfoot[RO]{\thepage\ of \pageref{LastPage}}
+
+\usepackage{color}
+  %\definecolor{}{rgb}{0.0, 0.0, 0.0}
+  \definecolor{xGreen}{rgb}{0.0,  0.6, 0.0}
+  \definecolor{xGray} {rgb}{0.5,  0.5, 0.5}
+  \definecolor{xMauve}{rgb}{0.58, 0.0, 0.82}
+
+\usepackage{listings}
+\lstset{
+  language          = [ISO]C++,%Java, Matlab, XML HTML, Python, PHP, Ruby, Perl,
+                               % bash, [x86masm]Assembler, [ANSI]C, [Sharp]C, 
+                               %[Visual]C++, [GNU]C++, Basic, 
+  breakatwhitespace = false,
+  breaklines        = true,  
+  backgroundcolor   = \color{white},
+  basicstyle        = \footnotesize,
+  captionpos        = b,  
+  commentstyle      = \color{xGreen}, 
+  keywordstyle      = \color{blue}, 
+  numberstyle       = \tiny\color{xGray},
+  stringstyle       = \color{xMauve}, 
+  deletekeywords    = {...},
+  escapeinside      = {\%*}{*)}, 
+  extendedchars     = true,  
+  frame             = none,
+  keepspaces        = true,  
+  morekeywords      = {*,...},
+  numbers           = left,  % where (none, left, right)
+  numbersep         = 5pt, 
+  rulecolor         = \color{black},
+  showspaces        = false, 
+  showstringspaces  = false, 
+  showtabs          = false,
+  stepnumber        = 2,  
+  tabsize           = 2, 
+  title             = \lstname
+}
+

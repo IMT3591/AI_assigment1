@@ -16,7 +16,7 @@ The environment is very modular because it consists of seperate "cells" which
 links to one another.  As shown in figure \ref{fig:env}
 
 \begin{figure}[h] \label{fig:env}	\centering
-\includegraphics[width=0.6\textwidth]{environment}
+\includegraphics[width=0.5\textwidth]{environment}
 \caption{Depiction of an environment}
 \end{figure}
 
@@ -35,7 +35,8 @@ Depicts the type of cell by using an integer.  The global ENUM variable sets the
 different types as OPEN, WALL and OBSTACLE which is later used in comparisons.
 
 \item[dirty:]
-This boolean value states whether or not the current Cell is dirty or not.
+This boolean value states whether or not the current Cell is dirty or not. If it
+is true the agent should suck it.
 
 \item[age:]
 This holds the information of how many steps it's been since it was last
@@ -97,7 +98,7 @@ To get a hold of the environment and the list there are created to static
 variablels which holds the first element of the list and the first Cell.
 
 \begin{figure}[h] \label{fig:list}	\centering
-\includegraphics[width=0.6\textwidth]{list}
+\includegraphics[width=0.5\textwidth]{list}
 \caption{Depiction of the list representation of cells}
 \end{figure}
 

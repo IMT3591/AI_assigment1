@@ -45,7 +45,6 @@ Agent::~Agent(){}
 	\date		20140122 - Adrian
 **/
 void Agent::move(){
-	moves++;
 	current->setVisited();
 	if( swipeNumber >= 1 ){
 		if( current->isSpace() ){		//If location isn't a wall or obstacle
@@ -76,6 +75,7 @@ void Agent::move(){
 		}// lastMove == UP
 		else if( lastMove==RIGHT ){
 			if(swipeNumber%2==0){
+				moves++;
 				current=current->getNeighbor(LEFT)->getNeighbor(UP);
 				lastMove=UP;
 			}else updateLocation( LEFT );
@@ -83,13 +83,14 @@ void Agent::move(){
 		} // lastMove == RIGHT
 		else if( lastMove==LEFT ){
 			if( swipeNumber%2==1){
+				moves++;
 				current=current->getNeighbor(RIGHT)->getNeighbor(UP);
 				lastMove=UP;
 			}else	updateLocation( RIGHT );
 			action( "Hit the left wall, running away" );
 		} // LastMove == LEFT
 		else if( lastMove==DOWN ){
-			current=current->getNeighbor( UP );
+			updateLocation( UP );
 			++swipeNumber;
 			lastMove = (swipeNumber%2==0) ? RIGHT:LEFT;
 			action( "Hit the bottom wall, running away" );
@@ -103,6 +104,7 @@ void Agent::move(){
 	\param	loc		Integer describing LEFT, RIGHT, UP or DOWN
 **/
 void Agent::updateLocation( int loc ){
+	moves++;
 	lastMove = loc;
 	current = current->getNeighbor( loc );
 }
@@ -250,4 +252,16 @@ Cell* Agent::getCurrent(){
 **/
 bool Agent::foundCorner(){
 	return corner;
+}
+
+void Agent::shutDown(){
+	run = false;
+}
+
+void Agent::boot(){
+	run = true;
+}
+
+bool Agent::isRunning(){
+	return run;
 }

@@ -43,7 +43,8 @@ class Agent{
 	int 	swipeNumber;	/*< Number of swipes around the hole environment */
 	int		STEPS;
 	bool	corner;
-  public:
+  
+	public:
 	Agent();
 	Agent( Cell* );
 	~Agent();
@@ -59,6 +60,9 @@ class Agent{
 	Cell* getCurrent();
 	void findCorner();
 	bool foundCorner();
+	void shutDown();
+	void boot();
+	bool isRunning();
 };
 
 #endif  // __AGENT_H_INCLUDED__

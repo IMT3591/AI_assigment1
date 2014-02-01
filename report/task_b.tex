@@ -63,14 +63,37 @@ but will be needed for other types of algorithmic designs. See figure
 \end{description}
 
 \subsection{Simple algorithm}
-
+	This algorithm is good for simple environment shapes, squares or rectangles without many obstacles inside.
+	
+	The algorithm starts by placing the agent in the bottom left corner, as shown on the picture. 
+	By doing this we are certain of the position of the agent and it can move more conciusly.
+	This part of the algorithm is pretty simple, the agent when created will only move towards the bottom.
+	Once it hits the wall and retreats it will only go to the left.
+	Again, when the left wall is hitted the agent knows its exact location.
+	This part of the algorithm is only done the first time it executes.
+	Once it finds the bottom left corner once its enough.
 
 \begin{figure}[h] \label{fig:corner}	\centering
 \includegraphics[width=0.5\textwidth]{find_corner}
 \caption{How the agent finds the corner}
 \end{figure}
 
+	After finding the bottom left corner the agent starts the actual algorithm.
+	The algorithm moves the agent in an S shape. 
+	Being in the bottom left corner the agent will start the first swipe to the right in the first row.
+	Once the agent hits the bottom right corner the agent will move one row up, and start the swipe number 2, to the left.
+	The variable swipeNumber is used to control in which direction the agent should go.
+	If the swipeNumber is an odd number the agent moves to the right until it find the wall. If it's an even number it moves to the left.
+	When the agent hits the top wall it starts going down to find the bottom row.
+	Once in the bottom row the number of swipes is increased again and the agent starts again the algorithm.
+	In the figure is easy to see how the agent moves, each of the red lines will be a movement and the green lines are the reaction of the agent after finding a wall.
 
+
+\begin{figure}[h]\label{fig:simpleAlgorithm} \centering
+\includegraphics[width=0.5\textwidth]{simple_algorithm}
+\caption{How the agent moves}
+\end{figure}
+	
 \subsection{Harder algorithm}
 
 

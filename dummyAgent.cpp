@@ -76,17 +76,19 @@ void Agent::move(){
 		else if( lastMove==RIGHT ){
 			if(swipeNumber%2==0){
 				moves++;
-				current=current->getNeighbor(LEFT)->getNeighbor(UP);
+				current = current->getNeighbor(LEFT)->getNeighbor(UP);
 				lastMove=UP;
-			}else updateLocation( LEFT );
+			}
+			else updateLocation( LEFT );
 			action( "Hit the right wall, running away" );
 		} // lastMove == RIGHT
 		else if( lastMove==LEFT ){
 			if( swipeNumber%2==1){
 				moves++;
 				current=current->getNeighbor(RIGHT)->getNeighbor(UP);
-				lastMove=UP;
-			}else	updateLocation( RIGHT );
+				lastMove = UP;
+			}
+			else	updateLocation( RIGHT );
 			action( "Hit the left wall, running away" );
 		} // LastMove == LEFT
 		else if( lastMove==DOWN ){

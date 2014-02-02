@@ -21,47 +21,52 @@ int main( ){
 	A = new Cell(1, false, OPEN);
 	B = new Cell(2, false, OPEN);
 	B->setNeighbors(A, NULL, NULL, NULL );
-	bender 	= new Agent( A );
 	lastMove = LEFT;
+
+	//bender 	= new Agent( A );
+	bender 	= new Agent( B );
+	
+	//A->setDirty( true );
+	//B->setDirty( true );
 
 	for( int i=0; i<STEPS; i++){
 		pt = bender->getCurrent();
-		//if( !A->getDirty() )	A->updateDirty();
-		//if( !B->getDirty() )	B->updateDirty();
+		if( !A->getDirty() )	A->updateDirty();
+		if( !B->getDirty() )	B->updateDirty();
 
 		if( bender->isRunning() ){
 			if( pt->getDirty() ){
 				bender->clean();
 			}
 			else if( lastMove == LEFT &&  pt->getNeighbor( LEFT ) != NULL ){
+				//bender->action("I'm moving to tho the left.");
 				bender->updateLocation( LEFT );
-				bender->action("I'm moving to tho the left.");
 			}
 			else if( pt->getNeighbor( RIGHT ) != NULL ){
 				lastMove = RIGHT;
+				//bender->action("I'm moving to tho the right.");
 				bender->updateLocation( lastMove );
-				bender->action("I'm moving to tho the right.");
 			}
 			else{
+				//bender->action("I've covered all cells, now stopping.");
 				bender->shutDown();
-				bender->action("Nothing more to do. I've been to the left and I've been to the right. I'm DOOOOOOONE, NO MORE CLEANING FOR ME.");
 			}
 		}
-/*		else if( wait == 5 || pt->getDirty() ){
-			lastMove = LEFT;
-			bender->boot();
-			wait = 0;
-		}*/
+	 else if( wait == 3 || pt->getDirty() ){
+		lastMove = LEFT;
+		bender->boot();
+		wait = 0;
+		}
 		else{
-			bender->action("No sucking, no moving until later.");
+			//bender->action("No operation done.");
 			++wait;
 		}
 		perf += calcPerfAward();
 	}
 	
-	cout << "Performance:\t" << perf << "\n";
+	cout << "\n\nPerformance:\t" << perf << "\n";
 	bender->printPerf();
-
+	cout << "\n\n";
 	return 0;
 }
 

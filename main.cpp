@@ -26,10 +26,10 @@ int main( ){
 	createMap();
 	bender 	= new Agent( START->getNeighbor(RIGHT)->getNeighbor(DOWN) );
 	displayMap();
-	List* x=list;
 	Cell* pt;
+	List* x;
 	for( int i=0; i<STEPS; i++){
-		x=list;
+		x = list;
 		while(x!=NULL){
 			if(x->info->isSpace() ) x->info->updateDirty();
 			x=x->n;
@@ -39,16 +39,17 @@ int main( ){
 			bender->clean();
 		}
 		else {
-			if( !bender->foundCorner() )	bender->findCorner();
-			bender->move();
+			if( !bender->foundCorner() )
+				bender->findCorner();
+			else
+				bender->move();
 		}
-		//displayMap();
+		displayMap();
 		perf += calcPerfAward();
 	}
 	
 	cout << "Performance:\t" << perf << "\n";
 	bender->printPerf();
-	displayMap();
 
 	/*
 	//	Recursive algorithm, it works but has a very low performance

@@ -114,6 +114,10 @@ number of steps has reached the maximum amount.  They stay very similar because
 of the RNG-method chosen. Which is using the ctime library, seed the RNG with
 time(0), and generate a random number which is limited with modulus 5.
 
+Because of this modulus 5, it will generate dirt extremely often and thus
+resulting in a low performance.  A clean cell will because of this have a 20\%
+chance of becoming dirty after each step.
+
 Each test is run three times to yield some comparison of its randomized dirt
 generation.
 
@@ -175,20 +179,39 @@ reaction of the agent after finding a wall.
 \end{figure}
 
 
+
+\subsubsection{Performance test}
+For the performance test we created an environment of 5 rows consisting of 6
+cells each.  The outer layer of cells are set to walls and there is no obstacles
+in the environment.  The dirt is randomly generated from the start and the agent
+does not maintain a log of the environment, nor where it's been. It follows the
+algorithm by finding the corner and then continuing by making passes side to
+side and work its way up and down.  It will not stop or pause, since the
+likelyhood of dirt allready have been generated on the row below is very likely
+and therefore will reduce the perfomance of the agent.
+
+The grid is a 5 by 6 matrix, outer layer is walls and the inner area is a 3 by 4
+matrix where dirt is randomly generated.
+
+In this case the chances of a clean cell becoming dirty again during a step is
+20\%.  This means the rate of clean cells becoming dirty again is extremely
+likely and therefore resulting in such a low performance since the perfect
+performance would be 12.000.
+
 \begin{longtable}{p{0.05\textwidth} p{0.075\textwidth} p{0.075\textwidth} 
-									p{0.05\textwidth} p{0.075\textwidth} p{0.075\textwidth} 
 									p{0.13\textwidth}}
-Start	& A & B & Steps & Moves & Cleans & Performance \\\hline
-A & Clean & Clean & 1000 
-		 &  &  &  \\
-	&&&&  &  &  \\
-	&&&&  &  &  \\\hline
-  &&&  AVG &  &  &  \\\hline
-b & Clean & Clean & 1000 
-		 &  &  &  \\
-	&&&&  &  &  \\
-	&&&&  &  &  \\\hline
-  &&&  AVG &  &  &  \\\hline
+Steps & Moves & Cleans	& Performance \\\hline
+1000  & 	558 & 	442		& 2248	\\
+1000  & 	537 & 	463 	& 2201	\\
+1000  & 	555 & 	445 	& 2189	\\
+1000  &		547 & 	453 	& 2359	\\
+1000  & 	558 & 	442 	&	2201	\\
+1000 	& 	546 & 	454 	&	2228	\\
+1000 	& 	549 & 	451 	&	2394	\\
+1000  &		527	& 	473		& 2186	\\
+1000  &		546 & 	454		& 2234	\\
+1000 	& 	543 & 	457		&	2331	\\\hline
+AVG		& 546.6 &  	453.4 &	2257.1	\\\hline
 \end{longtable}
 
 

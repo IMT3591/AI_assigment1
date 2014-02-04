@@ -174,14 +174,13 @@ void Agent::visit( Cell* cur, int dir, List* env ){
 	current = cur;
 	if( STEPS > STOP && current->isSpace() && current->getDirty() ){
 		clean();
+		calcPerf( env );
 	}
 	
-	if( STEPS > STOP )
-		calcPerf( env );
-
 	if( STEPS > STOP && current->retVisited() ){
 		moves++;
 		action( "Allready visited, going back." );
+		calcPerf( env );
 		return;
 	}
 
@@ -191,50 +190,60 @@ void Agent::visit( Cell* cur, int dir, List* env ){
 	if( STEPS > STOP && !current->isSpace() ){
 		moves++;
 		action( "Hit wall/object, going back." );
+		calcPerf( env );
 		return;
 	}
 
 	if( STEPS > STOP && current->isSpace() && 
 			dir != LEFT && r != NULL ){
 		action( "Moving RIGHT" );
+		calcPerf( env );
 		visit( r, RIGHT, env );
 		current = cur;
 	}
 	if( STEPS > STOP && cur->getDirty() ){
 		clean();
+		calcPerf( env );
 	}
 	if( STEPS > STOP && current->isSpace() && 
 			dir != RIGHT && l != NULL ){
 		action( "Moving LEFT" );
+		calcPerf( env );
 		visit( l, LEFT, env );
 		current = cur;
 	}
 	if( STEPS > STOP && cur->getDirty() ){
 		clean();
+		calcPerf( env );
 	}
 	if( STEPS > STOP && current->isSpace() && 
 			dir != UP && d != NULL ){
 		action( "Moving DOWN" );
+		calcPerf( env );
 		visit( d, DOWN, env );
 		current = cur;
 	}
 	if( STEPS > STOP && cur->getDirty() ){
 		clean();
+		calcPerf( env );
 	}
 	if( STEPS > STOP && current->isSpace() && 
 			dir != DOWN && u != NULL ){
 		action( "Moving UP" );
+		calcPerf( env );
 		visit( u, UP, env );
 		current = cur;
 	}
 	if( STEPS > STOP && cur->getDirty() ){
 		clean();
+		calcPerf( env );
 	}
 	cur->resetVisited();
 	current = cur;
 
 	if( STEPS > STOP ){
 		action("Going back, where I came from.");
+		calcPerf( env );
 		moves++;
 	}
 	return;

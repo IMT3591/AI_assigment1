@@ -84,7 +84,7 @@ int main( ){
 			}	
 		}
 
-	//displayMap();
+		//displayMap();
 		perf += calcPerfAward();
 	}
 

@@ -53,7 +53,7 @@ class Agent{
 	void action( const char txt[] );
 	void updateLocation( int );
 	int	 retLocID();
-	void visit( Cell* );
+	void visit( Cell*, int, List* );
 	void printSteps();
 	void printPerf();
 	int	retSteps();

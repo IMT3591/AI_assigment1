@@ -62,6 +62,7 @@ class Cell{
 
 		bool	retVisited();
 		void	setVisited();
+		void	resetVisited();
 };
 
 #endif  // __ENVIRONMENT_H_INCLUDED__ 

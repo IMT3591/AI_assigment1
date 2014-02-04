@@ -19,7 +19,6 @@ Agent::Agent(){
 	swipeNumber = -1;
 	STEPS		= INIT_STEPS;
 	corner		= false;
-	current->setVisited();
 }
 
 Agent::Agent(Cell* tLocation){
@@ -32,7 +31,6 @@ Agent::Agent(Cell* tLocation){
 	swipeNumber = -1;
 	STEPS		= INIT_STEPS;
 	corner		= false;
-	current->setVisited();
 }
 
 Agent::~Agent(){}
@@ -120,6 +118,7 @@ void Agent::updateLocation( int loc ){
 **/
 void Agent::action(const char txt[]){
 	cout << "\nAction:\t" << txt;
+	STEPS--;
 }
 
 /**
@@ -148,46 +147,74 @@ int Agent::retLocID(){
 	\brief Recursive function to visit an arbitrary type of environment, very 
 	poor performance and it has to mark the visited locations
 **/
-void Agent::visit( Cell* cur ){
-	if( STEPS == 0) return;
-	Cell* l, *r, *u, *d;
+void Agent::visit( Cell* cur, int dir, List* env ){
+	moves++;	STEPS--;
+	if( STEPS == 0 ) return;
+	Cell *l, *r, *u, *d;
 	l = cur->getNeighbor( LEFT );
 	r = cur->getNeighbor( RIGHT );
 	u = cur->getNeighbor( UP );
 	d = cur->getNeighbor( DOWN );
-
-	if( cur->isSpace() && !cur->retVisited()){
-		current = cur;
-		cur->setVisited();
-		if( cur->getDirty()  && STEPS != 0){
-			clean();
-		}
-		if( l != NULL && STEPS != 0){
-			action( "Moving to the left, performance point withdrawn.");
-			visit( l );
-		}
-		if( r != NULL  && STEPS != 0){
-			action( "Moving to the right, performance point withdrawn.") ;
-			visit( r );
-		}
-		if( u != NULL  && STEPS != 0){
-			action( "Moving up, performance point withdrawn." );
-			visit( u );
-		}
-		if( d != NULL  && STEPS != 0){
-			action( "Moving down, performance point withdrawn." );
-			visit( d );
-		}
+	List* a = env;
+	while( a != NULL ){
+		if(a->info->isSpace() && !a->info->getDirty() )
+			a->info->updateDirty();
+		a = a->n;
 	}
-	else if( cur->retVisited()  && STEPS != 0){
-		current = cur;
+	
+	current = cur;
+	if( STEPS != 0 && current->isSpace() && cur->getDirty() ){
+		clean();
+	}
+	if( STEPS != 0 && current->retVisited() ){
 		action( "Allready visited, going back." );
+		moves++;
 		return;
 	}
-	else if( !cur->isSpace()  && STEPS != 0){
-		action( "Hit the wall, retreat." );
+	if( STEPS != 0 && !current->isSpace() ){
+		action( "Hit wall/object, going back." );
+		moves++;
 		return;
 	}
+
+	if( STEPS != 0 && current->isSpace() && 
+			dir != LEFT && r != NULL ){
+		action( "Moving " );
+		visit( r, RIGHT, env );
+		current = cur;
+	}
+	if( STEPS != 0 && cur->getDirty() ){
+		clean();
+	}
+	if( STEPS != 0 && current->isSpace() && 
+			dir != RIGHT && l != NULL ){
+		action( "Moving " );
+		visit( l, LEFT, env );
+		current = cur;
+	}
+	if( STEPS != 0 && cur->getDirty() ){
+		clean();
+	}
+	if( STEPS != 0 && current->isSpace() && 
+			dir != UP && d != NULL ){
+		action( "Moving " );
+		visit( d, DOWN, env );
+		current = cur;
+	}
+	if( STEPS != 0 && cur->getDirty() ){
+		clean();
+	}
+	if( STEPS != 0 && current->isSpace() && 
+			dir != DOWN && u != NULL ){
+		action( "Moving " );
+		visit( u, UP, env );
+		current = cur;
+	}
+	if( STEPS != 0 && cur->getDirty() ){
+		clean();
+	}
+	moves++;
+	return;
 }
 
 /**
@@ -224,8 +251,9 @@ void Agent::findCorner(){
 	\brief Prints the performance data of the agent
 **/
 void Agent::printPerf(){
-	cout << "Movements:\t" << moves << "\n";
-	cout << "Cells cleaned:\t" << cleans << "\n";
+	cout << "Steps:\t\t"				<< STEPS	<< "\n";
+	cout << "Movements:\t" 			<< moves	<< "\n";
+	cout << "Cells cleaned:\t"	<< cleans << "\n";
 }
 
 /**

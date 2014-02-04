@@ -10,6 +10,7 @@ void	displayMap();
 Cell* findCell(int);
 int		retType(char*);
 int		calcPerfAward();
+bool	checkCorner( int, int, Cell* );
 //  Global variables
 int			STEPS = 1000;
 //char 		FNAME[] = "..\\geo.mp";
@@ -18,8 +19,8 @@ int 		LAST_KEY;
 Cell*		START;
 List*		list;
 Agent*	bender;
-int 		perf;
-
+int 		perf, wait;
+bool		TL, TR, BL, BR;
 //Main function
 int main( ){
 	srand( time(0) );
@@ -28,6 +29,8 @@ int main( ){
 	displayMap();
 	Cell* pt;
 	List* x;
+	wait = 0;
+	TL = TR = BL = BR = false;
 	for( int i=0; i<STEPS; i++){
 		x = list;
 		while(x!=NULL){
@@ -35,19 +38,58 @@ int main( ){
 			x=x->n;
 		}
 		pt = bender->getCurrent();
-		if( pt->getDirty() ){
-			bender->clean();
+		//Checking for corners
+		if( checkCorner(LEFT,		UP, pt) ){
+			TL = true;
+			//bender->action("Found top left corner");
 		}
-		else {
-			if( !bender->foundCorner() )
+		if( checkCorner(RIGHT,	UP, pt) ){
+			TR = true;
+			//bender->action("Found top right corner");
+		}
+		if( checkCorner(LEFT,	 	DOWN, pt) ){
+			BL = true;
+			//bender->action("Found bottomleft corner");
+		}
+		if( checkCorner(RIGHT,	DOWN, pt) ){
+			BR = true;
+			//bender->action("Found bottom right corner");
+		}
+		if( bender->isRunning() && TL && TR && BL && BR ){
+			bender->shutDown();
+			bender->action("Cleaned the area shutting down.");
+		}
+		
+		if( bender->isRunning() ){
+			if( pt->getDirty() ){
+				bender->clean();
+			}
+			else if( !bender->foundCorner() ){
 				bender->findCorner();
-			else
+			}
+			else{
 				bender->move();
+			}
 		}
-		displayMap();
+		else{
+			if( wait < 3 && !pt->getDirty() ){
+				bender->action("Nothing to do");
+				wait ++;
+			}
+			else{
+				bender->action("restarting");
+				bender->boot();
+				TL = TR = BL = BR = false;
+				wait = 0;
+			}	
+		}
+
+	//displayMap();
 		perf += calcPerfAward();
 	}
-	
+
+	//Final print
+	displayMap();
 	cout << "Performance:\t" << perf << "\n";
 	bender->printPerf();
 
@@ -132,7 +174,8 @@ void displayMap(){
 		a = findCell( i );
 		if( a->getNeighbor(LEFT) == NULL ){	cout << '\n';}
 		if ( i == bender->retLocID() )			{ cout << "H"; }
-		else if( a->retVisited() == true )	{ cout << "B"; }
+		else if( a->getDirty()   )  { cout << "D"; }
+		else if( a->retVisited() )	{ cout << "B"; }
 		else a->getType();
 		cout << ' ';
 	}
@@ -153,3 +196,13 @@ int calcPerfAward(){
 	return award;
 }
 
+bool	checkCorner( int a, int b, Cell* p ){
+	Cell* x, *y;
+	x = p->getNeighbor( a );
+	y = p->getNeighbor( b );
+	if( p->retType() != WALL && 
+			(x==NULL || x->retType() == WALL ) &&
+			(y==NULL || y->retType() == WALL) )
+		return true;
+	return false;
+}

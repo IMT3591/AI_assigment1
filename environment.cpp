@@ -294,4 +294,7 @@ bool Cell::retVisited(){
 void  Cell::setVisited(){
 	visited = true;
 }
+void  Cell::resetVisited(){
+	visited = false;
+}
 

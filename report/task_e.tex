@@ -1,3 +1,87 @@
 
 \section{Task E}
+\subsection{Two-cell environment}
+\subsubsection{Environment description}
+\subsubsection{Agent description}
+
+\subsubsection{Random dirt performance test}
+This test case is the same as previous, but here the environment will receive
+randomly generated dirt at the start of each step before the agent perceives the
+location.  Then if it has covered all the cells, it will stop and wait for
+a maximum of 3 steps or until its current location becomes dirty. Then it will
+restart it self and go over the environment once more. This continues until the
+number of steps has reached the maximum amount.  They stay very similar because
+of the RNG-method chosen. Which is using the ctime library, seed the RNG with
+time(0), and generate a random number which is limited with modulus 5.
+
+Because of this modulus 5, it will generate dirt extremely often and thus
+resulting in a low performance.  A clean cell will because of this have a 20\%
+chance of becoming dirty after each step.
+
+Each test is run three times to yield some comparison of its randomized dirt
+generation.
+
+\begin{longtable}{p{0.05\textwidth} p{0.075\textwidth} p{0.075\textwidth} 
+									p{0.05\textwidth} p{0.075\textwidth} p{0.075\textwidth} 
+									p{0.13\textwidth}}
+Start	& A & B & Steps & Moves & Cleans & Performance \\\hline
+A & Clean & Clean & 1000 
+		 & 239 & 279 & 1480 \\
+	&&&& 233 & 305 & 1404 \\
+	&&&& 241 & 292 & 1423 \\
+	&&&& 238 & 287 & 1378 \\
+	&&&& 231 & 309 & 1426 \\\hline
+  &&& AVG & 236.4 & 294.4 & 1422.2\\\hline
+
+B & Clean & Clean & 1000 
+		 & 236 & 279 & 1437 \\
+	&&&& 236 & 317 & 1412 \\
+	&&&& 236 & 306 & 1412 \\
+	&&&& 240 & 290 & 1478 \\
+	&&&& 244 & 308 & 1474 \\\hline
+  &&& AVG & 238.4 & 300.0 & 1442.6 \\\hline
+\end{longtable}
+
+\subsection{Simple environment}
+\subsubsection{Environment description}
+
+\subsubsection{Agent description}
+
+\subsubsection{Performance test - updated dirt}
+For the performance test we created an environment of 5 rows consisting of 6
+cells each.  The outer layer of cells are set to walls and there is no obstacles
+in the environment.  The dirt is randomly generated from the start and the agent
+does not maintain a log of the environment, nor where it's been. It follows the
+algorithm by finding the corner and then continuing by making passes side to
+side and work its way up and down.  It will pause each time it has found all
+four corners, the pause is a maximum of 3 steps or untill the location becomes
+dirty.
+
+The grid is a 5 by 6 matrix, outer layer is walls and the inner area is a 3 by 4
+matrix where dirt is randomly generated.
+
+In this case the chances of a clean cell becoming dirty again during a step is
+20\%\.  This means the rate of clean cells becoming dirty again is extremely
+likely and therefore resulting in such a low performance since the perfect
+performance would be 12.000.
+
+\begin{longtable}{ p{0.05\textwidth} p{0.075\textwidth} p{0.075\textwidth} 
+									 p{0.13\textwidth} }
+Steps & Moves & Cleans	& Performance \\\hline
+1000	& 525 & 444 & 2214 \\
+ 		 	& 535 & 434 & 2102 \\
+ 			& 537 & 431 & 2197 \\
+ 			& 531 & 438 & 2163 \\
+ 			& 522 & 447 & 2328 \\\hline
+AVG		& 530 & 438 &	2200 \\\hline
+\end{longtable}
+
+
+\subsection{Recursive agent - Theoretical}
+\subsubsection{Environment description}
+
+\subsubsection{Agent description}
+
+\subsubsection{Performance test - updated dirt}
+
 

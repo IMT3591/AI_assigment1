@@ -175,7 +175,7 @@ int   Cell::getAge(){
   \retval false Is returned if the dirty state was not updated
 **/
 bool  Cell::updateDirty(){
-  if( rand()% 5 == 0 && dirty == false ){
+	if( rand()% 5 == 0 && dirty == false ){
     dirty = true;
     return true;
   }

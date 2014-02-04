@@ -117,7 +117,7 @@ void Agent::updateLocation( int loc ){
 	\param	perf	Integer to add to current performance value
 **/
 void Agent::action(const char txt[]){
-	cout << "\nAction:\t" << txt;
+	//cout << "\nAction:\t" << txt;
 	STEPS--;
 }
 
@@ -148,22 +148,28 @@ int Agent::retLocID(){
 	poor performance and it has to mark the visited locations
 **/
 void Agent::visit( Cell* cur, int dir, List* env ){
-	moves++;	STEPS--;
 	if( STEPS == 0 ) return;
-	Cell *l, *r, *u, *d;
-	l = cur->getNeighbor( LEFT );
-	r = cur->getNeighbor( RIGHT );
-	u = cur->getNeighbor( UP );
-	d = cur->getNeighbor( DOWN );
-	List* a = env;
+	moves++;	STEPS--;
+	
 	while( a != NULL ){
 		if(a->info->isSpace() && !a->info->getDirty() )
-			a->info->updateDirty();
+			a->info->updateAge();
 		a = a->n;
+	}
+
+	Cell *l, *r, *u, *d;
+	l = cur->getNeighbor( LEFT );		r = cur->getNeighbor( RIGHT );
+	u = cur->getNeighbor( UP );			d = cur->getNeighbor( DOWN );
+	List* a = env;
+
+	//old aquaintance reset age and visited
+	if( cur->getAge() >= 10 ){
+		cur->resetVisited();
+		cur->resetAge();
 	}
 	
 	current = cur;
-	if( STEPS != 0 && current->isSpace() && cur->getDirty() ){
+	if( STEPS != 0 && current->isSpace() && current->getDirty() ){
 		clean();
 	}
 	if( STEPS != 0 && current->retVisited() ){
@@ -171,9 +177,14 @@ void Agent::visit( Cell* cur, int dir, List* env ){
 		moves++;
 		return;
 	}
+
+	//New cell set visited
+	current->setVisited();
+	//if wall opr obstacle
 	if( STEPS != 0 && !current->isSpace() ){
 		action( "Hit wall/object, going back." );
 		moves++;
+		current->resetVisited();
 		return;
 	}
 
@@ -213,6 +224,8 @@ void Agent::visit( Cell* cur, int dir, List* env ){
 	if( STEPS != 0 && cur->getDirty() ){
 		clean();
 	}
+	cur->resetVisited();
+	current = cur;
 	moves++;
 	return;
 }

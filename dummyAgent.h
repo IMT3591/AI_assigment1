@@ -43,6 +43,7 @@ class Agent{
 	int 	swipeNumber;	/*< Number of swipes around the hole environment */
 	int		STEPS;
 	bool	corner;
+	int		perf;
   
 	public:
 	Agent();
@@ -63,6 +64,7 @@ class Agent{
 	void shutDown();
 	void boot();
 	bool isRunning();
+	void calcPerf( List* );
 };
 
 #endif  // __AGENT_H_INCLUDED__

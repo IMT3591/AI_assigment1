@@ -8,29 +8,32 @@
 
 int INIT_PERFORMANCE = 0;
 int INIT_STEPS = 1000;
+int STOP = 0;
 
 Agent::Agent(){
 	current 	= NULL;
-	memoryMap 	= NULL;
+	memoryMap = NULL;
 	lastMove 	= -1;
-	run 		= true;
-	moves		= 0;
+	run 			= true;
+	moves			= 0;
 	cleans		= 0;
 	swipeNumber = -1;
-	STEPS		= INIT_STEPS;
+	STEPS			= INIT_STEPS;
 	corner		= false;
+	perf			= 0;
 }
 
 Agent::Agent(Cell* tLocation){
 	current 	= tLocation;	//Sets the current location as provided
-	memoryMap 	= tLocation;	//Sets the start of the memory map
+	memoryMap = tLocation;	//Sets the start of the memory map
 	lastMove 	= 0;			//Sets run to true
-	run 		= true;
-	moves		= 0;
+	run 			= true;
+	moves			= 0;
 	cleans		= 0;
 	swipeNumber = -1;
-	STEPS		= INIT_STEPS;
+	STEPS			= INIT_STEPS;
 	corner		= false;
+	perf			= 0;
 }
 
 Agent::~Agent(){}
@@ -117,7 +120,7 @@ void Agent::updateLocation( int loc ){
 	\param	perf	Integer to add to current performance value
 **/
 void Agent::action(const char txt[]){
-	//cout << "\nAction:\t" << txt;
+	cout << "\nAction:\t" << txt;
 	STEPS--;
 }
 
@@ -148,9 +151,10 @@ int Agent::retLocID(){
 	poor performance and it has to mark the visited locations
 **/
 void Agent::visit( Cell* cur, int dir, List* env ){
-	if( STEPS == 0 ) return;
-	moves++;	STEPS--;
+	moves++;
+	if( STEPS <= STOP ) return;
 	
+	List* a = env;
 	while( a != NULL ){
 		if(a->info->isSpace() && !a->info->getDirty() )
 			a->info->updateAge();
@@ -160,7 +164,6 @@ void Agent::visit( Cell* cur, int dir, List* env ){
 	Cell *l, *r, *u, *d;
 	l = cur->getNeighbor( LEFT );		r = cur->getNeighbor( RIGHT );
 	u = cur->getNeighbor( UP );			d = cur->getNeighbor( DOWN );
-	List* a = env;
 
 	//old aquaintance reset age and visited
 	if( cur->getAge() >= 10 ){
@@ -169,64 +172,71 @@ void Agent::visit( Cell* cur, int dir, List* env ){
 	}
 	
 	current = cur;
-	if( STEPS != 0 && current->isSpace() && current->getDirty() ){
+	if( STEPS > STOP && current->isSpace() && current->getDirty() ){
 		clean();
 	}
-	if( STEPS != 0 && current->retVisited() ){
-		action( "Allready visited, going back." );
+	
+	if( STEPS > STOP )
+		calcPerf( env );
+
+	if( STEPS > STOP && current->retVisited() ){
 		moves++;
+		action( "Allready visited, going back." );
 		return;
 	}
 
 	//New cell set visited
 	current->setVisited();
 	//if wall opr obstacle
-	if( STEPS != 0 && !current->isSpace() ){
-		action( "Hit wall/object, going back." );
+	if( STEPS > STOP && !current->isSpace() ){
 		moves++;
-		current->resetVisited();
+		action( "Hit wall/object, going back." );
 		return;
 	}
 
-	if( STEPS != 0 && current->isSpace() && 
+	if( STEPS > STOP && current->isSpace() && 
 			dir != LEFT && r != NULL ){
-		action( "Moving " );
+		action( "Moving RIGHT" );
 		visit( r, RIGHT, env );
 		current = cur;
 	}
-	if( STEPS != 0 && cur->getDirty() ){
+	if( STEPS > STOP && cur->getDirty() ){
 		clean();
 	}
-	if( STEPS != 0 && current->isSpace() && 
+	if( STEPS > STOP && current->isSpace() && 
 			dir != RIGHT && l != NULL ){
-		action( "Moving " );
+		action( "Moving LEFT" );
 		visit( l, LEFT, env );
 		current = cur;
 	}
-	if( STEPS != 0 && cur->getDirty() ){
+	if( STEPS > STOP && cur->getDirty() ){
 		clean();
 	}
-	if( STEPS != 0 && current->isSpace() && 
+	if( STEPS > STOP && current->isSpace() && 
 			dir != UP && d != NULL ){
-		action( "Moving " );
+		action( "Moving DOWN" );
 		visit( d, DOWN, env );
 		current = cur;
 	}
-	if( STEPS != 0 && cur->getDirty() ){
+	if( STEPS > STOP && cur->getDirty() ){
 		clean();
 	}
-	if( STEPS != 0 && current->isSpace() && 
+	if( STEPS > STOP && current->isSpace() && 
 			dir != DOWN && u != NULL ){
-		action( "Moving " );
+		action( "Moving UP" );
 		visit( u, UP, env );
 		current = cur;
 	}
-	if( STEPS != 0 && cur->getDirty() ){
+	if( STEPS > STOP && cur->getDirty() ){
 		clean();
 	}
 	cur->resetVisited();
 	current = cur;
-	moves++;
+
+	if( STEPS > STOP ){
+		action("Going back, where I came from.");
+		moves++;
+	}
 	return;
 }
 
@@ -267,6 +277,7 @@ void Agent::printPerf(){
 	cout << "Steps:\t\t"				<< STEPS	<< "\n";
 	cout << "Movements:\t" 			<< moves	<< "\n";
 	cout << "Cells cleaned:\t"	<< cleans << "\n";
+	cout << "Internal Perf:\t"	<< perf		<< "\n";
 }
 
 /**
@@ -307,4 +318,13 @@ void Agent::boot(){
 
 bool Agent::isRunning(){
 	return run;
+}
+
+void Agent::calcPerf( List* env ){
+	List* a = env;
+	while( a != NULL ){
+		if( a->info->isSpace() && !a->info->getDirty() )
+			perf++;
+		a = a->n;
+	}
 }

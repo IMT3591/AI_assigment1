@@ -11,8 +11,16 @@
 	\clearpage
 	\input{task_a}
 	\input{task_b}
-	\clearpage
 	\input{task_c}
 	\input{task_d}
 	\input{task_e}
+
+	\section{Reason for low performance}
+		Our method for allocation dirt will allocate dirt to a cell wil 20\%\ chance
+		of creating it in the current location.  This means that the envinorment
+		will almost continously add dirt to the environment after the cell has been
+		cleaned.
+
+		This means that the agent basically can't clean the environment fast enough
+		to have a good performance rate
 \end{document}

@@ -2,7 +2,20 @@
 \section{Task E}
 \subsection{Two-cell environment}
 \subsubsection{Environment description}
+\t This is the basic environment, with only two cells. The two cells are manually
+created and they only point one to each other. This means that the only neighbor
+of the left cell is the right cell and viceversa.
+
+The dirty state of each cell is randomly updated with a probability of the 20\% 
+of getting dirty. One out of 5 times the cell gets dirty.
+
 \subsubsection{Agent description}
+\t The agent implementation for the two cell environment is easier than for
+bigger or more complex environments. 
+
+In this case the agent has less states. It can be placed in a clean cell working,
+then it will move to the other cell. If it is in a dirty cell it will suck it. 
+If it is off he will do nothing.
 
 \subsubsection{Random dirt performance test}
 This test case is the same as previous, but here the environment will receive
@@ -43,12 +56,29 @@ B & Clean & Clean & 1000
 \end{longtable}
 
 \subsection{Simple environment}
-\subsubsection{Environment description}
+\subsubsection{Environment description}\label{sec:SimpleEnvDesc}
+\t We created an environment of 5 rows consisting of 6 cells each. The outer layer of
+cells are set to walls and there are no obstacles within. That makes a rectangular
+inner shape of 3 rows and 4 columns. 
+
+The dirt spread around the environment is randomly generated every time the main
+program updates. The probability that a cell gets dirty is 20\%\. This means that the
+cell will become dirty once every 5 times it gets updated.
+
 
 \subsubsection{Agent description}
+\t The agent in the simple environment it's the basic agent we programmed called
+dummyAgent aka Bender. This agent uses the S algorithm to go trhough the hole
+environment.
+
+In the simple environment as explained in section \ref{sec:SimpleEnvDesc} The dirt
+ state in the cell is updated. With this condition, the agent stops working once he
+ found all the four corners. When the current location becomes dirty or he has being
+ waiting for 3 cycles he will reboot and start cleaning again. By waiting this time 
+ we make sure that the agent doesn't move over just cleaned cells.
 
 \subsubsection{Performance test - updated dirt}
-For the performance test we created an environment of 5 rows consisting of 6
+\t For the performance test we created an environment of 5 rows consisting of 6
 cells each.  The outer layer of cells are set to walls and there is no obstacles
 in the environment.  The dirt is randomly generated from the start and the agent
 does not maintain a log of the environment, nor where it's been. It follows the

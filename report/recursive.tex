@@ -4,19 +4,67 @@ In this setting the environments dirt allocation is randomly generated whenever
 the agent moves to a new location.  It goes through the list sent as a parameter
 to the visit function to allocate dirt.
 
+The agent will move by recursion, where it will try to move to the cells in a
+specific order. If it hits a cell it has previously visited it will return and
+therefore the order of which cells are visited will be randomized based on how
+the dirt configuration is after each step.
 
 \subsubsection{Agent description}
-The environments shape, dirt allocation will not affect the agent, since it is
-doesn't make any assumptions about the environment. The agent will 
+The environments shape, dirt allocation will not affect the agent, since it
+doesn't make any assumptions about the environment. The agent will avoid moving
+to the cell it originated from until it has tried all other neighboring
+locations.
+
+The agent will start by generating dirt in the entire environment and then
+retrieve all neighboring cells.  Then it will check if its current location has
+an age of more 10, if this is true it means the agent has visited this location
+for more than 10 steps ago.  If this is true it should reset the visited state
+and view the cell as a new location which may need cleaning.
+
+The performance, movements, cleans and steps are updated internally by the
+agent. Steps are decreased after each performed action. Performance is
+calculated after each movement or cleaning. Movements are updated each time the
+agent moves to a new cell or returns to a previous location.
+
+If the number of steps remaining reaches 0 the agent should stop performing its
+actions and revert to the main function to print its performance data.
+
+If the step counter is more than 0 it will perform actions to move around and
+clean the environment.  If the agent reaches a wall or an object, it will mark
+the cell as visited and return to its originating location after calculating its
+statistical data.  If it reaches a cell which is an open space it will check if
+it needs cleaning, otherwise it will continue by trying to move to an adjacent
+cell.
+
+Moving to an adjacent cell is based upon the criteria that it isn't the location
+it originated from. Which means if the previous movement was to the right, the
+agent should avoid moving to the left from its current location.
+
+This is the case for LEFT, RIGHT, UP, and DOWN.  In between each movements the
+agent will check if the current cell has become dirty again, and try to clean
+it.
+
+When the agent has moved to each of the adjacent cells it will reset the visited
+state of the current location and check whether there are any remaining steps.
+
+If there is steps left it will decrease the step counter, increase the move
+counter and calculate the performance value before returning to the previous
+location, (function call).
+
+
+In the main function the main driver for the agent will make it run until its
+step counter has become 0.
+
+Then it will print the number of steps remaining.
 
 \subsubsection{Performance test - updated dirt}
 \begin{longtable}{ p{0.05\textwidth} p{0.075\textwidth} p{0.075\textwidth} 
 									 p{0.13\textwidth} }
 Steps & Moves & Cleans	& Performance \\\hline
-1000	&  &  &  \\
- 		 	&  &  &  \\
- 			&  &  &  \\
- 			&  &  &  \\
- 			&  &  &  \\\hline
-AVG		&  &  &	 \\\hline
+1000	& 589 & 312 & 4799 \\
+ 		 	& 698 & 303 & 4482 \\
+ 			& 689 & 312 & 4397 \\
+ 			& 682 & 319 & 4538 \\
+ 			& 689 & 312 & 4318 \\\hline
+AVG		& 669 & 311 &	4506 \\\hline
 \end{longtable}
